@@ -20,8 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bitmap_image.hpp" />
-    <ClCompile Include="bitmap_test.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="mandlebrot_drawer.cpp" />
+    <ClCompile Include="mandlebrot_drawer.hpp" />
     <ClCompile Include="generator.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="utils.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
