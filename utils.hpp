@@ -3,6 +3,9 @@
 #include <cmath>
 #include <filesystem>
 #include <string>
+#include <ranges>
+
+#include "generator.hpp"
 
 template<std::floating_point T>
 bool almost_equal(T x, T y, int ulp = 2)
@@ -44,7 +47,6 @@ struct picture_domain_t
 
     bool is_resolution_for_domain(resolution_t res) const
     {
-        std::cout.precision(CHAR_BIT * sizeof(double));
         return almost_equal(res.ratio(), x.length() / y.length());
     }
 };

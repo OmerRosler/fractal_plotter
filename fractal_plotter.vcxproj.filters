@@ -30,9 +30,15 @@
     <ClCompile Include="mandlebrot_drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="bandt_algorithm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="bandt_algorithm.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
