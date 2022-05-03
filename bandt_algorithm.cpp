@@ -70,7 +70,7 @@ M_pixel_map(
     {
             std::complex<double> r = 0;
             r.real((domain.x.length() * x) / res.width + domain.x.start);
-            r.imag((domain.y.length() * y) / res.height + domain.y.start);
+            r.imag(-domain.y.length() * y / res.height + domain.y.end);
 
             auto i = bandt_algorithm(r, max_iterations);
             co_yield{ {x,y}, std::abs(r), i };

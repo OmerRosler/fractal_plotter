@@ -7,13 +7,13 @@
 */
 int main()
 {
-    /*draw_mandlebrot("pics/mandlebrot.bmp",
-        resolution_t{1200, 800},
-        picture_domain_t{ .x{0.1,0.4}, .y{-0.1, 0.1} },
-        1000);*/
+    //draw_mandlebrot("pics/mandlebrot.bmp",
+    //    resolution_t{800, 800},
+    //    picture_domain_t{ .x{0,2}, .y{-1.5, 0.5} },
+    //    100);
     draw_M("pics/M.bmp",
         resolution_t{ 800,800 },
-        picture_domain_t{ .x{0, 1/std::sqrt(2)}, .y{-1 / std::sqrt(2), 0}},
-        30);
+        picture_domain_t{ .x{0, 1/std::sqrt(2)}, .y{0, 1 / std::sqrt(2)}},
+        20);
     return 0;
 }

@@ -38,7 +38,7 @@ mandlebrot_pixel_map(
         {
             std::complex<double> c = 0;
             c.real(domain.x.length() * x / res.width + domain.x.start);
-            c.imag(domain.y.length() * y / res.height + domain.y.start);
+            c.imag(-domain.y.length() * y / res.height + domain.y.end);
 
             auto i = iterate_mandlebrot(c, max_iterations);
             co_yield{ {x,y}, std::abs(c), i };
