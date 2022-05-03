@@ -21,10 +21,26 @@ inline std::complex<double> gm1(std::complex<double> r, std::complex<double> t)
 	return (t - 1.0) / r;
 }
 
-std::vector<std::complex<double>> generate_next_set(std::complex<double> r,
-	const std::vector<std::complex<double>>& previous_set);
+struct bandt_algorithm_functor
+{
+	bandt_algorithm_functor(std::vector<std::complex<double>>* vec1,
+		std::vector<std::complex<double>>* vec2,
+		std::size_t capacity = std::pow(2, 16)) :
+		t_n(vec1), t_np1(vec2)
+	{
+		t_n->clear();
+		t_np1->clear();
+		t_n->reserve(capacity);
+		t_np1->reserve(capacity);
+	}
+	unsigned int operator()(std::complex<double> r, unsigned int max_iterations);
 
-unsigned int bandt_algorithm(std::complex<double> r, unsigned int max_iterations);
+private:
+	std::vector<std::complex<double>>* t_n;
+	std::vector<std::complex<double>>* t_np1;
+
+	void generate_next_set(std::complex<double> r);
+};
 
 /* Yields:
 *  - the starting pixel

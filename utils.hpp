@@ -22,6 +22,14 @@ struct pixel_coordinates
     unsigned int y;
 };
 
+struct resolution_t
+{
+    unsigned int width;
+    unsigned int height;
+
+    double ratio() const { return double(width) / height; }
+};
+
 struct interval_t
 {
     double start;
@@ -30,13 +38,7 @@ struct interval_t
     double length() const { return end - start; }
 };
 
-struct resolution_t
-{
-    unsigned int width;
-    unsigned int height;
 
-    double ratio() const { return double(width) / height; }
-};
 // The domain is a rectangle as BMP files are rectangles
 struct picture_domain_t
 {
@@ -51,3 +53,19 @@ struct picture_domain_t
     }
 };
 
+template<std::ranges::range Rng1, std::ranges::range Rng2>
+auto cartesian_product(Rng1 rng1,
+    Rng2 rng2) ->
+    
+    std::generator<std::tuple<std::ranges::range_value_t<Rng1>,
+    std::ranges::range_value_t<Rng2>>>
+{
+    for (auto&& x : rng1)
+    {
+        for (auto&& y : rng2)
+        {
+            co_yield std::tuple{ std::forward<decltype(x)>(x), 
+                std::forward<decltype(y)>(y) };
+        }
+    }
+}
