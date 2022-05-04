@@ -4,9 +4,13 @@
 #include <filesystem>
 #include <string>
 #include <ranges>
+#include <concepts>
+#include <complex>
 
 #include "generator.hpp"
 
+/* General tool to compare floating point types
+*/
 template<std::floating_point T>
 bool almost_equal(T x, T y, int ulp = 2)
 {
@@ -16,7 +20,8 @@ bool almost_equal(T x, T y, int ulp = 2)
         // unless the result is subnormal
         || std::fabs(x - y) < std::numeric_limits<T>::min();
 }
-struct pixel_coordinates
+
+struct pixel_coordinates_t
 {
     unsigned int x;
     unsigned int y;
@@ -52,20 +57,3 @@ struct picture_domain_t
         return almost_equal(res.ratio(), x.length() / y.length());
     }
 };
-
-template<std::ranges::range Rng1, std::ranges::range Rng2>
-auto cartesian_product(Rng1 rng1,
-    Rng2 rng2) ->
-    
-    std::generator<std::tuple<std::ranges::range_value_t<Rng1>,
-    std::ranges::range_value_t<Rng2>>>
-{
-    for (auto&& x : rng1)
-    {
-        for (auto&& y : rng2)
-        {
-            co_yield std::tuple{ std::forward<decltype(x)>(x), 
-                std::forward<decltype(y)>(y) };
-        }
-    }
-}
