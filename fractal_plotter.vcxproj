@@ -19,14 +19,22 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bandt_algorithm.cpp" />
+    <ClCompile Include="bandt_drawer.cpp" />
     <ClCompile Include="bitmap_image.hpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mandlebrot_algorithm.cpp" />
     <ClCompile Include="mandlebrot_drawer.cpp" />
     <ClCompile Include="mandlebrot_drawer.hpp" />
     <ClCompile Include="generator.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bandt_algorithm.hpp" />
+    <ClInclude Include="bandt_drawer.hpp" />
+    <ClInclude Include="mandlebrot_algorithm.hpp" />
+    <ClInclude Include="run_algorithm_per_pixel.hpp" />
     <ClInclude Include="utils.hpp" />
+    <ClInclude Include="zoom_in_tool.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -112,6 +120,11 @@
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>false</EnableModules>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

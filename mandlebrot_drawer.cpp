@@ -1,52 +1,5 @@
 #include "mandlebrot_drawer.hpp"
 
-unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterations)
-{
-    std::complex<double> next = 0;
-    std::complex<double> prev = 0;
-
-    for (unsigned int i = 0; i < max_iterations; i++)
-    {
-        prev = next;
-        next = prev * prev + c;
-
-        //if the norm exceeds 4 then `next` is not in the set
-        if (std::norm(next) > 4)
-        {
-            c = next;
-            return i;
-        }
-
-    }
-    return max_iterations + 1;
-}
-
-/* Yields:
-*  - the starting pixel
-*  - the magnitude of the iterate when it exceeds 4
-*  - the index of escape
-*/
-std::generator<std::tuple<pixel_coordinates, double, unsigned int>>
-mandlebrot_pixel_map(
-    resolution_t res,
-    picture_domain_t domain,
-    unsigned int max_iterations)
-{
-    for (unsigned int y : std::ranges::views::iota(0u, res.height))
-    {
-        for (unsigned int x : std::ranges::views::iota(0u, res.width))
-        {
-            std::complex<double> c = 0;
-            c.real(domain.x.length() * x / res.width + domain.x.start);
-            c.imag(domain.y.length() * y / res.height + domain.y.start);
-
-            auto i = iterate_mandlebrot(c, max_iterations);
-            co_yield{ {x,y}, std::abs(c), i };
-
-        }
-    }
-}
-
 void draw_mandlebrot(
     const std::string& pic_path,
     resolution_t res,
@@ -59,11 +12,12 @@ void draw_mandlebrot(
     fractal_jet.clear();
 
     for (auto&& [pixel, escape_mag, escape_index] :
-        mandlebrot_pixel_map(res, domain, max_iterations))
+        run_algorithm_per_pixel<mandlebrot_algorithm_functor>(res, domain, max_iterations))
     {
         // The pixel did NOT escape and is inside the Mandlebrot set
-        if (escape_index == max_iterations + 1)
+        if (escape_index == max_iterations)
         {
+            //black
             fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
             continue;
         }

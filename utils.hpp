@@ -3,7 +3,14 @@
 #include <cmath>
 #include <filesystem>
 #include <string>
+#include <ranges>
+#include <concepts>
+#include <complex>
 
+#include "generator.hpp"
+
+/* General tool to compare floating point types
+*/
 template<std::floating_point T>
 bool almost_equal(T x, T y, int ulp = 2)
 {
@@ -13,10 +20,19 @@ bool almost_equal(T x, T y, int ulp = 2)
         // unless the result is subnormal
         || std::fabs(x - y) < std::numeric_limits<T>::min();
 }
-struct pixel_coordinates
+
+struct pixel_coordinates_t
 {
     unsigned int x;
     unsigned int y;
+};
+
+struct resolution_t
+{
+    unsigned int width;
+    unsigned int height;
+
+    double ratio() const { return double(width) / height; }
 };
 
 struct interval_t
@@ -27,13 +43,7 @@ struct interval_t
     double length() const { return end - start; }
 };
 
-struct resolution_t
-{
-    unsigned int width;
-    unsigned int height;
 
-    double ratio() const { return double(width) / height; }
-};
 // The domain is a rectangle as BMP files are rectangles
 struct picture_domain_t
 {
@@ -44,8 +54,6 @@ struct picture_domain_t
 
     bool is_resolution_for_domain(resolution_t res) const
     {
-        std::cout.precision(CHAR_BIT * sizeof(double));
         return almost_equal(res.ratio(), x.length() / y.length());
     }
 };
-
