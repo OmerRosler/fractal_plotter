@@ -21,6 +21,13 @@ bool almost_equal(T x, T y, int ulp = 2)
         || std::fabs(x - y) < std::numeric_limits<T>::min();
 }
 
+
+struct r2vec_t
+{
+    double x;
+    double y;
+};
+
 struct pixel_coordinates_t
 {
     unsigned int x;

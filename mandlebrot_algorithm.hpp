@@ -18,4 +18,14 @@ struct mandlebrot_algorithm_functor
     {
         return iterate_mandlebrot(c, max_iterations);
     }
+
+    static bool is_trivially_inside(std::complex<double> r)
+    {
+        return r == 0.0;
+    }
+
+    static bool is_trivially_outside(std::complex<double> r)
+    {
+        return std::norm(r) >= 4;
+    }
 };

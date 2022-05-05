@@ -5,20 +5,6 @@
 
 #include "utils.hpp"
 
-inline std::complex<double> g0(std::complex<double> r, std::complex<double> t)
-{
-	return t / r;
-}
-
-inline std::complex<double> g1(std::complex<double> r, std::complex<double> t)
-{
-	return (t + 1.0) / r;
-}
-
-inline std::complex<double> gm1(std::complex<double> r, std::complex<double> t)
-{
-	return (t - 1.0) / r;
-}
 
 struct bandt_algorithm_functor
 {
@@ -40,9 +26,34 @@ struct bandt_algorithm_functor
 
 	unsigned int operator()(std::complex<double> r, unsigned int max_iterations);
 
+	static bool is_trivially_outside(std::complex<double> r)
+	{
+		return std::norm(r) > 0.5;
+	}
+
+	static bool is_trivially_inside(std::complex<double> r)
+	{
+		return std::norm(r) < 0.25;
+	}
+
 private:
 	std::vector<std::complex<double>>* t_n;
 	std::vector<std::complex<double>>* t_np1;
 
 	void generate_next_set(std::complex<double> r);
+
+	static std::complex<double> g0(std::complex<double> r, std::complex<double> t)
+	{
+		return t / r;
+	}
+
+	static std::complex<double> g1(std::complex<double> r, std::complex<double> t)
+	{
+		return (t + 1.0) / r;
+	}
+
+	static std::complex<double> gm1(std::complex<double> r, std::complex<double> t)
+	{
+		return (t - 1.0) / r;
+	}
 };
