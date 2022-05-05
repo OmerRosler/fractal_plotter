@@ -28,12 +28,12 @@ unsigned int N_algorithm_functor::operator()(r2vec_t r,
 
     if (N_algorithm_functor:: is_trivially_outside(r))
     {
-        return max_iterations;
+        return 0;
     }
 
     if (N_algorithm_functor::is_trivially_inside(r))
     {
-        return 0;
+        return max_iterations;
     }
     //Note there is no devision by zero here because these cases are covered by the trivial parts
     t_n->push_back({ 1.0 / r.x, 1.0 / r.y });

@@ -16,33 +16,26 @@ void draw_N(
     for (auto&& [pixel, r, escape_index] :
         run_algorithm_per_pixel<N_algorithm_functor>(res, domain, max_iterations))
     {
-        // Outside N
-        if (escape_index == max_iterations)
+        if (N_algorithm_functor::is_trivially_outside(r))
         {
-            // trivially outside
-            if (N_algorithm_functor::is_trivially_outside(r))
-            {
-                //grey
-                fractal_jet.set_pixel(pixel.x, pixel.y, 100, 100, 100);
-            }
-            else
-            {
-                //black
-                fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
-            }
+            //grey
+            fractal_jet.set_pixel(pixel.x, pixel.y, 100, 100, 100);
+        }
+        else if (N_algorithm_functor::is_trivially_inside(r))
+        {
+            //light grey
+            fractal_jet.set_pixel(pixel.x, pixel.y, 150, 150, 150);
+        }
+        // Inside N
+        else if (escape_index == max_iterations)
+        {
+            //black
+            fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
         }
         else
         {
-            if (N_algorithm_functor::is_trivially_inside(r))
-            {
-                //light grey
-                fractal_jet.set_pixel(pixel.x, pixel.y, 150, 150, 150);
-            }
-            else
-            {
-                //white
-                fractal_jet.set_pixel(pixel.x, pixel.y, 255, 255, 255);
-            }
+            //white
+            fractal_jet.set_pixel(pixel.x, pixel.y, 255, 255, 255);
         }
     }
 

@@ -28,11 +28,11 @@ unsigned int bandt_algorithm_functor::operator()(std::complex<double> r,
 
     if (is_trivially_inside(r))
     {
-        return 0;
+        return max_iterations;
     }
     if (is_trivially_outside(r))
     {
-        return max_iterations;
+        return 0;
     }
 
     t_n->push_back(1.0 / r);

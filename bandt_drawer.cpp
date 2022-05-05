@@ -15,22 +15,18 @@ void draw_M(
     for (auto&& [pixel, r, escape_index] :
         run_algorithm_per_pixel<bandt_algorithm_functor>(res, domain, max_iterations))
     {
-        // Outside M
-        if (escape_index == max_iterations)
+        if (bandt_algorithm_functor::is_trivially_inside(r))
         {
-            // trivially outside
-            if (bandt_algorithm_functor::is_trivially_outside(r))
-            {
-                //grey
-                fractal_jet.set_pixel(pixel.x, pixel.y, 100, 100, 100);
-            }
-            else
-            {
-                //black
-                fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
-            }
+            //grey
+            fractal_jet.set_pixel(pixel.x, pixel.y, 100, 100, 100);
         }
-        else
+        // Inside M
+        else if (escape_index == max_iterations)
+        {
+            //black
+            fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
+        }
+        else //non-trivially outside
         {
             //white
             fractal_jet.set_pixel(pixel.x, pixel.y, 255, 255, 255);

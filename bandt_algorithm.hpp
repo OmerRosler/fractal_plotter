@@ -26,12 +26,12 @@ struct bandt_algorithm_functor
 
 	unsigned int operator()(std::complex<double> r, unsigned int max_iterations);
 
-	static bool is_trivially_outside(std::complex<double> r)
+	static bool is_trivially_inside(std::complex<double> r)
 	{
 		return std::norm(r) > 0.5;
 	}
 
-	static bool is_trivially_inside(std::complex<double> r)
+	static bool is_trivially_outside(std::complex<double> r)
 	{
 		return std::norm(r) < 0.25;
 	}

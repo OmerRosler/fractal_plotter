@@ -57,17 +57,18 @@ private:
 
 	static r2vec_t g0(r2vec_t r, r2vec_t t)
 	{
-		return { t.x / r.x , t.y / r.y };
+		return t / r;
 	}
 
 	static r2vec_t g1(r2vec_t r, r2vec_t t)
 	{
-		return { (t.x + 1.0) / r.x , (t.y + 1.0) / r.y };
+		return (t + r2vec_t{1.0, 1.0}) / r;
 	}
 
 	static r2vec_t gm1(r2vec_t r, r2vec_t t)
 	{
-		return { (t.x - 1.0) / r.x , (t.y - 1.0) / r.y };
+		return (t - r2vec_t{ 1.0, 1.0 }) / r;
+
 	}
 
 };
