@@ -1,7 +1,8 @@
-#include "bandt_drawer.hpp"
+#include "N_drawer.hpp"
 
+static_assert(r2_fractal_algorithm<N_algorithm_functor>);
 
-void draw_M(
+void draw_N(
     const std::string& pic_path,
     resolution_t res,
     picture_domain_t domain,
@@ -13,20 +14,25 @@ void draw_M(
     fractal_jet.clear();
 
     for (auto&& [pixel, r, escape_index] :
-        run_algorithm_per_pixel<bandt_algorithm_functor>(res, domain, max_iterations))
+        run_algorithm_per_pixel<N_algorithm_functor>(res, domain, max_iterations))
     {
-        if (bandt_algorithm_functor::is_trivially_inside(r))
+        if (N_algorithm_functor::is_trivially_outside(r))
         {
             //grey
             fractal_jet.set_pixel(pixel.x, pixel.y, 100, 100, 100);
         }
-        // Inside M
+        else if (N_algorithm_functor::is_trivially_inside(r))
+        {
+            //light grey
+            fractal_jet.set_pixel(pixel.x, pixel.y, 150, 150, 150);
+        }
+        // Inside N
         else if (escape_index == max_iterations)
         {
             //black
             fractal_jet.set_pixel(pixel.x, pixel.y, 0, 0, 0);
         }
-        else //non-trivially outside
+        else
         {
             //white
             fractal_jet.set_pixel(pixel.x, pixel.y, 255, 255, 255);

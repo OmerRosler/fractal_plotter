@@ -26,16 +26,13 @@ unsigned int bandt_algorithm_functor::operator()(std::complex<double> r,
     t_n->clear();
     t_np1->clear();
 
-
-    //Trivially inside
-    if (std::abs(r) < 0.5)
-    {
-        return 0;
-    }
-    //Trivially outside
-    if (r == 0.0 || std::abs(r) > 1.0 / std::sqrt(2))
+    if (is_trivially_inside(r))
     {
         return max_iterations;
+    }
+    if (is_trivially_outside(r))
+    {
+        return 0;
     }
 
     t_n->push_back(1.0 / r);

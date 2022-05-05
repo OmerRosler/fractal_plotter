@@ -27,11 +27,15 @@
     <ClCompile Include="mandlebrot_drawer.cpp" />
     <ClCompile Include="mandlebrot_drawer.hpp" />
     <ClCompile Include="generator.hpp" />
+    <ClCompile Include="N_algorithm.cpp" />
+    <ClCompile Include="N_drawer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bandt_algorithm.hpp" />
     <ClInclude Include="bandt_drawer.hpp" />
     <ClInclude Include="mandlebrot_algorithm.hpp" />
+    <ClInclude Include="N_algorithm.hpp" />
+    <ClInclude Include="N_drawer.hpp" />
     <ClInclude Include="run_algorithm_per_pixel.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="zoom_in_tool.hpp" />
