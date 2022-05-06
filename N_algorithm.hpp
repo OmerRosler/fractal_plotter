@@ -40,8 +40,8 @@ struct N_algorithm_functor
 	static bool is_trivially_inside(r2vec_t r)
 	{
 		return std::abs(r.x * r.y) > 0.5 ||
-			(r.x == 0 && (r.y <= 1.0 && r.y >=1.0)) || 
-			(r.y == 0 && (r.x <= 1.0 && r.x >= 1.0));
+			(r.x == 0 && (r.y <= 1.0 && r.y >= -1.0)) || 
+			(r.y == 0 && (r.x <= 1.0 && r.x >= -1.0));
 	}
 	static bool is_trivially_outside(r2vec_t r)
 	{
