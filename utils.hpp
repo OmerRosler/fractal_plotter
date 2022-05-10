@@ -171,4 +171,22 @@ concept complex_fractal_algorithm = fractal_algorithm < F, std::complex<double>>
 template<typename F>
 concept r2_fractal_algorithm = fractal_algorithm < F, r2vec_t>;
 
+/* A type that declares how much memory it requires will use it,
+*  otherwise don't pre-allocate anything
+*/
+template<typename Alg>
+constexpr std::size_t caclulate_pre_allocation_buffer_size(unsigned int max_iterations)
+{
+    if constexpr (
+        requires {
+            {Alg::approximate_maximal_dynamic_memory(max_iterations) } ->
+                std::convertible_to<std::size_t>; })
+    {
+        return Alg::approximate_maximal_dynamic_memory(max_iterations);
+    }
+    else
+    {
+        return 0;
+    }
+}
 }

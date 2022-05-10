@@ -8,16 +8,20 @@ namespace frc
 template<typename Derived, typename T, std::size_t N>
 class dfs_bandt_algorithm_functor
 {
-	using dfs_iterator = recursive_tree_dfs_iterator<T, N>;
+protected:
+    std::pmr::memory_resource* memory;
 
 public:
-	struct memory_layout_t
-	{
-	};
+	using dfs_iterator = recursive_tree_dfs_iterator<T, N>;
 
-	dfs_bandt_algorithm_functor(memory_layout_t& memory) noexcept
+	dfs_bandt_algorithm_functor(std::pmr::memory_resource* memory) noexcept: memory(memory)
     {
         static_assert(bandt_like_fractal_algorithm<Derived, T, N>);
+    }
+
+    static constexpr std::size_t approximate_maximal_dynamic_memory(unsigned int max_iterations)
+    {
+        return (sizeof(T) + sizeof(std::size_t)) * max_iterations + sizeof(T);
     }
 
     /* This algorithm is a DFS approach to the algorithm described in
@@ -42,7 +46,8 @@ public:
 
         dfs_iterator tree_iterator(Derived::generate_fns_for_tree(r),
             Derived::root(r),
-            max_iterations);
+            max_iterations,
+            memory);
 
         const auto stop_condition = [&r](const T& t) -> bool
         {

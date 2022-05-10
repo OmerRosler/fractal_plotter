@@ -6,6 +6,7 @@
 #include "utils.hpp"
 #include "recursive_tree_dfs_iterator.hpp"
 #include "dfs_bandt_algorithm.hpp"
+
 namespace frc
 {
 class bandt_algorithm_functor : 
@@ -14,7 +15,7 @@ class bandt_algorithm_functor :
 	using base_t = dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>;
 public:
 
-	bandt_algorithm_functor(memory_layout_t& memory) noexcept : base_t(memory) {}
+	bandt_algorithm_functor(std::pmr::memory_resource* rsc) noexcept : base_t(rsc) {}
 
 	static bool is_trivially_inside(std::complex<double> r)
 	{
@@ -48,9 +49,11 @@ private:
 
 public:
 
-	static std::array<dfs_iterator::generator_t, 3> generate_fns_for_tree(const std::complex<double>& r)
+	static dfs_iterator::generator_fns_container_t generate_fns_for_tree(const std::complex<double>& r)
 	{
-		return { std::bind_front(g0, r), std::bind_front(g1, r), std::bind_front(gm1, r) };
+		return { std::bind_front(g0, r),
+			std::bind_front(g1, r),
+			std::bind_front(gm1, r) };
 	}
 
 	static bool stop_iterating_value(const std::complex<double>& r, const std::complex<double>& t)

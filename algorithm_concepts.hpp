@@ -1,6 +1,8 @@
 #pragma once
 #include <concepts>
 #include <array>
+#include <memory>
+
 namespace frc
 {
     /* A concept that represents an algorithm to decide if a point is inside a fractal.
@@ -14,8 +16,7 @@ namespace frc
     template<typename F, typename ValueT>
     concept fractal_algorithm = std::regular_invocable<F, ValueT&, unsigned int> &&
         requires {
-        typename F::memory_layout_t;
-            requires std::constructible_from<F, typename F::memory_layout_t&>;
+                requires std::constructible_from<F, std::pmr::memory_resource*>;
             requires std::is_convertible_v<
                 std::invoke_result_t<F, ValueT&, unsigned int>,
                     unsigned int>;
@@ -25,6 +26,10 @@ namespace frc
         {F::is_trivially_inside(r)} -> std::convertible_to<bool>;
         {F::is_trivially_outside(r)} -> std::convertible_to<bool>;
     };
+
+
+    template<typename T, std::size_t N>
+    class recursive_tree_dfs_iterator;
 
     /* A concept to represent the algorithm described in Bandt's paper for
     * determining connctedness loci of a linear IFS
@@ -41,9 +46,12 @@ namespace frc
     template<typename F, typename ValueT, std::size_t N>
     concept bandt_like_fractal_algorithm = fractal_algorithm<F, ValueT> &&
         requires(const ValueT & r, const ValueT & t) {
+        typename F::dfs_iterator;
+            requires std::same_as<typename F::dfs_iterator, 
+                recursive_tree_dfs_iterator<ValueT, N>>;
 
             {F::generate_fns_for_tree(r)}->
-                std::convertible_to < std::array<typename F::dfs_iterator::generator_t, N>>;
+                std::convertible_to < typename F::dfs_iterator::generator_fns_container_t>;
             {F::stop_iterating_value(r, t)} ->
                 std::convertible_to<bool>;
             {F::root(r)} -> std::convertible_to<ValueT>;
