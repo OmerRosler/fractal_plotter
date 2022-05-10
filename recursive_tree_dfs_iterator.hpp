@@ -6,6 +6,8 @@
 #include <functional>
 #include <cassert>
 
+namespace frc
+{
 /* This type models an output operator that generates a ternary tree by
 	* recursive applications of an array of functions
 	*
@@ -266,3 +268,4 @@ public:
 		}
 	}
 };
+}

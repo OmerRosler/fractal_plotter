@@ -8,7 +8,9 @@
 #include <complex>
 
 #include "generator.hpp"
-
+#include "algorithm_concepts.hpp"
+namespace frc
+{
 /* General tool to compare floating point types
 */
 template<std::floating_point T>
@@ -23,6 +25,7 @@ bool almost_equal(T x, T y, int ulp = 2)
 
 /* An arithmetic and comparable type to represent R2 cartesian coordinates
 */
+
 struct r2vec_t
 {
     double x;
@@ -159,3 +162,13 @@ struct picture_domain_t
         return almost_equal(res.ratio(), x.length() / y.length());
     }
 };
+
+
+template<typename F>
+concept complex_fractal_algorithm = fractal_algorithm < F, std::complex<double>>;
+
+
+template<typename F>
+concept r2_fractal_algorithm = fractal_algorithm < F, r2vec_t>;
+
+}

@@ -2,7 +2,8 @@
 #include <format>
 
 #include "utils.hpp"
-
+namespace frc
+{
 /* Helper function to generate the input to a plotting function when trying to
 * zoom in around a given point in a given distance
 */
@@ -15,3 +16,4 @@ inline generate_domain_and_resolution(std::complex<double> pt, double radius)
 		std::format("zoom_pt_{}_{}i_radius{}", pt.real(), pt.imag(), radius) };
 }
 
+}

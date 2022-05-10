@@ -1,5 +1,7 @@
 #include "mandlebrot_algorithm.hpp"
 
+namespace frc
+{
 unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterations)
 {
     std::complex<double> next = 0;
@@ -19,4 +21,5 @@ unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterat
 
     }
     return max_iterations;
+}
 }

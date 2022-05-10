@@ -1,36 +1,8 @@
 #pragma once
 #include "utils.hpp"
 
-/* A concept that represents an algorithm to decide if a point is inside a fractal.
-* The call operator return type must be convertible to `unsigned int` and the value
-* `max_iterations` represents an inside point, any other value is for outside
-* (it could be an escape index for example).
-* 
-* We also require the functor to have two "easily computable" methods to decide if
-* a point is in a trivial part of the fratal or its' complement.
-*/
-template<typename F, typename ValueT>
-concept fractal_algorithm = std::regular_invocable<F, ValueT&, unsigned int> &&
-    requires {
-    typename F::memory_layout_t;
-        requires std::constructible_from<F, typename F::memory_layout_t&>;
-        requires std::is_convertible_v<
-            std::invoke_result_t<F, ValueT&, unsigned int>,
-                unsigned int>;
-} &&
-    requires(ValueT r)
+namespace frc
 {
-    {F::is_trivially_inside(r)} -> std::convertible_to<bool>;
-    {F::is_trivially_outside(r)} -> std::convertible_to<bool>;
-};
-
-
-template<typename F>
-concept complex_fractal_algorithm = fractal_algorithm < F, std::complex<double>>;
-
-
-template<typename F>
-concept r2_fractal_algorithm = fractal_algorithm < F, r2vec_t>;
 
 /* This is a serial algorithm that runs a functor that decides whether a complex point
 * is in a given fractal
@@ -112,4 +84,5 @@ std::generator<std::tuple<pixel_coordinates_t,
             co_yield{ {x,y}, r, i };
         }
     }
+}
 }
