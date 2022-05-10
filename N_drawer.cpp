@@ -1,5 +1,7 @@
 #include "N_drawer.hpp"
 
+namespace frc
+{
 static_assert(r2_fractal_algorithm<N_algorithm_functor>);
 
 void draw_N(
@@ -40,4 +42,5 @@ void draw_N(
     }
 
     fractal_jet.save_image(pic_path);
+}
 }

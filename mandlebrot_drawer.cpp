@@ -1,5 +1,7 @@
 #include "mandlebrot_drawer.hpp"
 
+namespace frc
+{
 void draw_mandlebrot(
     const std::string& pic_path,
     resolution_t res,
@@ -33,4 +35,5 @@ void draw_mandlebrot(
     }
 
     fractal_jet.save_image(pic_path);
+}
 }

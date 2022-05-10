@@ -4,27 +4,17 @@
 #include <ranges>
 
 #include "utils.hpp"
-
-
-struct bandt_algorithm_functor
+#include "recursive_tree_dfs_iterator.hpp"
+#include "dfs_bandt_algorithm.hpp"
+namespace frc
 {
+class bandt_algorithm_functor : 
+	public dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>
+{
+	using base_t = dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>;
+public:
 
-	struct memory_layout_t
-	{
-		std::vector<std::complex<double>> alg_memory[2];
-	};
-
-	bandt_algorithm_functor(memory_layout_t& memory,
-		std::size_t capacity = std::pow(2, 24)) :
-		t_n(&memory.alg_memory[0]), t_np1(&memory.alg_memory[1])
-	{
-		t_n->clear();
-		t_np1->clear();
-		t_n->reserve(capacity);
-		t_np1->reserve(capacity);
-	}
-
-	unsigned int operator()(std::complex<double> r, unsigned int max_iterations);
+	bandt_algorithm_functor(memory_layout_t& memory) noexcept : base_t(memory) {}
 
 	static bool is_trivially_inside(std::complex<double> r)
 	{
@@ -37,23 +27,43 @@ struct bandt_algorithm_functor
 	}
 
 private:
-	std::vector<std::complex<double>>* t_n;
-	std::vector<std::complex<double>>* t_np1;
 
-	void generate_next_set(std::complex<double> r);
-
-	static std::complex<double> g0(std::complex<double> r, std::complex<double> t)
+	static std::complex<double> g0(const std::complex<double>& r, 
+		const std::complex<double>& t)
 	{
 		return t / r;
 	}
 
-	static std::complex<double> g1(std::complex<double> r, std::complex<double> t)
+	static std::complex<double> g1(const std::complex<double>& r, 
+		const std::complex<double>& t)
 	{
 		return (t + 1.0) / r;
 	}
 
-	static std::complex<double> gm1(std::complex<double> r, std::complex<double> t)
+	static std::complex<double> gm1(const std::complex<double>& r, 
+		const std::complex<double>& t)
 	{
 		return (t - 1.0) / r;
 	}
+
+public:
+
+	static std::array<dfs_iterator::generator_t, 3> generate_fns_for_tree(const std::complex<double>& r)
+	{
+		return { std::bind_front(g0, r), std::bind_front(g1, r), std::bind_front(gm1, r) };
+	}
+
+	static bool stop_iterating_value(const std::complex<double>& r, const std::complex<double>& t)
+	{
+		const auto ro = std::abs(r);
+		const auto cut_off = 1 / (1.0 - ro);
+
+		return std::abs(t) > cut_off;
+	}
+
+	static std::complex<double> root(const std::complex<double>& r)
+	{
+		return 1.0 / r;
+	}
 };
+}

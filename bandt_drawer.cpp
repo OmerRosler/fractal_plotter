@@ -1,6 +1,7 @@
 #include "bandt_drawer.hpp"
 
-
+namespace frc
+{
 void draw_M(
     const std::string& pic_path,
     resolution_t res,
@@ -34,4 +35,5 @@ void draw_M(
     }
 
     fractal_jet.save_image(pic_path);
+}
 }

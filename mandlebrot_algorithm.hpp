@@ -2,7 +2,8 @@
 
 #include "utils.hpp"
 
-
+namespace frc
+{
 /* Takes a complex number c, iterates z^2+c until |z|^2>4 or max_iterations
 * It sets `c` the last iterate and returns the index in which the cutoff was passed
 *
@@ -29,3 +30,4 @@ struct mandlebrot_algorithm_functor
         return std::norm(r) >= 4;
     }
 };
+}
