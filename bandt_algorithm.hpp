@@ -49,9 +49,11 @@ private:
 
 public:
 
-	static std::array<dfs_iterator::generator_t, 3> generate_fns_for_tree(const std::complex<double>& r)
+	static dfs_iterator::generator_fns_container_t generate_fns_for_tree(const std::complex<double>& r)
 	{
-		return { std::bind_front(g0, r), std::bind_front(g1, r), std::bind_front(gm1, r) };
+		return { std::bind_front(g0, r),
+			std::bind_front(g1, r),
+			std::bind_front(gm1, r) };
 	}
 
 	static bool stop_iterating_value(const std::complex<double>& r, const std::complex<double>& t)

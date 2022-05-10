@@ -21,10 +21,18 @@ class recursive_tree_dfs_iterator
 	const unsigned max_depth;
 	std::pmr::vector<T> previous_values;
 	std::pmr::vector<int> previous_ids;
-	using value_generators_t = std::array<std::function<T(const T&)>, N>;
-	const value_generators_t new_value_generators;
+public:
+//Note std::move_only_function is C++23 which is too new at the moment
+#ifdef __cpp_lib_move_only_function
+	using generator_t = std::move_only_function<T(const T&) const>;
+#else
+	using generator_t = std::function<T(const T&)>;
+#endif
+	using generator_fns_container_t = std::array<generator_t, N>;
+private:
+	const generator_fns_container_t new_value_generators;
 
-	recursive_tree_dfs_iterator(value_generators_t gens) noexcept: max_depth(0), 
+	recursive_tree_dfs_iterator(generator_fns_container_t gens) noexcept: max_depth(0), 
 		new_value_generators(gens) {}
 
 	void traverse_up_until_not_last_child()
@@ -52,25 +60,24 @@ class recursive_tree_dfs_iterator
 
 public:
 
-	using generator_t = typename value_generators_t::value_type;
 
-	recursive_tree_dfs_iterator(value_generators_t gens,
+	recursive_tree_dfs_iterator(generator_fns_container_t&& gens,
 		const T& start_value,
 		unsigned int max_depth,
 		std::pmr::memory_resource* rsc) :
 		max_depth(max_depth), 
 		previous_values{rsc}, 
 		previous_ids{rsc},
-		new_value_generators(gens)
+		new_value_generators(std::move(gens))
 	{
 		previous_values.reserve(max_depth + 1);
 		previous_ids.reserve(max_depth);
 
 		this->reset(start_value, max_depth);
 	}
-	recursive_tree_dfs_iterator(value_generators_t gens, 
+	recursive_tree_dfs_iterator(generator_fns_container_t&& gens, 
 		unsigned int max_depth,
-		std::pmr::memory_resource* rsc) : recursive_tree_dfs_iterator(gens, {}, {}, max_depth, rsc) {}
+		std::pmr::memory_resource* rsc) : recursive_tree_dfs_iterator(std::move(gens), {}, {}, max_depth, rsc) {}
 
 	recursive_tree_dfs_iterator(const recursive_tree_dfs_iterator&) = default;
 	recursive_tree_dfs_iterator(recursive_tree_dfs_iterator&&) = default;
@@ -118,14 +125,14 @@ public:
 		return recursive_tree_dfs_iterator();
 	}
 
-	recursive_tree_dfs_iterator skip_subtree()
+	void skip_subtree()
 	{
 		//go back up the tree until there is an avilable borther node
 		traverse_up_until_not_last_child();
 		// went too far, reached the end
 		if (depth() == 1)
 		{
-			return null();
+			return;
 		}
 
 		//change the position vector
@@ -136,15 +143,14 @@ public:
 		const T last_value = previous_values.back();
 		previous_values.emplace_back(new_value_generators[previous_ids.back()](last_value));
 
-		return *this;
 	}
 
-	recursive_tree_dfs_iterator advance_dfs()
+	void advance_dfs()
 	{
 		// if we are at a leaf, move sideways
 		if (depth() == max_depth)
 		{
-			return skip_subtree();
+			skip_subtree();
 		}
 		else
 		{
@@ -153,7 +159,6 @@ public:
 			const T last_value = previous_values.back();
 			previous_values.emplace_back(new_value_generators[0](last_value));
 		}
-		return *this;
 	}
 
 	//iterator interface

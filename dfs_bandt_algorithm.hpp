@@ -8,11 +8,11 @@ namespace frc
 template<typename Derived, typename T, std::size_t N>
 class dfs_bandt_algorithm_functor
 {
-	using dfs_iterator = recursive_tree_dfs_iterator<T, N>;
 protected:
     std::pmr::memory_resource* memory;
 
 public:
+	using dfs_iterator = recursive_tree_dfs_iterator<T, N>;
 
 	dfs_bandt_algorithm_functor(std::pmr::memory_resource* memory) noexcept: memory(memory)
     {
