@@ -1,31 +1,8 @@
 #include "bandt_algorithm.hpp"
 
-void bandt_algorithm_functor::generate_next_set(std::complex<double> r)
-{
-    const auto ro = std::abs(r);
-    const auto cut_off = 1 / (1.0 - ro);
-
-    t_np1->clear();
-
-    for (const auto& v : *t_n)
-    {
-        const std::complex<double> candidates[] = { g0(r,v), g1(r,v), gm1(r,v) };
-        for (const auto& cand : candidates)
-        {
-            if (std::abs(cand) <= cut_off)
-            {
-                t_np1->push_back(cand);
-            }
-        }
-    }
-}
-
 unsigned int bandt_algorithm_functor::operator()(std::complex<double> r, 
     unsigned int max_iterations)
 {
-    t_n->clear();
-    t_np1->clear();
-
     if (is_trivially_inside(r))
     {
         return max_iterations;
@@ -35,16 +12,36 @@ unsigned int bandt_algorithm_functor::operator()(std::complex<double> r,
         return 0;
     }
 
-    t_n->push_back(1.0 / r);
+    dfs_iterator tree_iterator(generate_fns_for_tree(r),
+        1.0/r,
+        max_iterations);
 
-    for (auto i = 0u; i < max_iterations; i++)
+    //note that the implicit conversion is fine as `max_depth <= max_iterations`
+    std::size_t max_depth = 0u;
+
+    const auto ro = std::abs(r);
+    const auto cut_off = 1 / (1.0 - ro);
+
+    do
     {
-        if (t_n->empty())
+        const auto dpt = tree_iterator.depth();
+
+        //Go back if point is outside
+        if (std::abs(*tree_iterator) > cut_off)
         {
-            return i;
+            max_depth = std::max(max_depth, dpt);
+            tree_iterator.skip_subtree();
+            continue;
         }
-        generate_next_set(r);
-        std::swap(t_n, t_np1);
-    }
-    return max_iterations;
+        //found accumolation point, stop early
+        if (dpt == max_iterations)
+        {
+            return max_iterations;
+        }
+        ++tree_iterator;
+
+    } while (tree_iterator.depth() != 1);
+
+    //`max_depth` is the furthest N for which we found a point inside the cut-off sphere
+    return max_depth;
 }

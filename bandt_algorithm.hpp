@@ -4,25 +4,18 @@
 #include <ranges>
 
 #include "utils.hpp"
+#include "recursive_tree_dfs_iterator.hpp"
 
-
-struct bandt_algorithm_functor
+class bandt_algorithm_functor
 {
+	using dfs_iterator = recursive_tree_dfs_iterator<std::complex<double>, 3>;
 
+public:
 	struct memory_layout_t
 	{
-		std::vector<std::complex<double>> alg_memory[2];
 	};
 
-	bandt_algorithm_functor(memory_layout_t& memory,
-		std::size_t capacity = std::pow(2, 24)) :
-		t_n(&memory.alg_memory[0]), t_np1(&memory.alg_memory[1])
-	{
-		t_n->clear();
-		t_np1->clear();
-		t_n->reserve(capacity);
-		t_np1->reserve(capacity);
-	}
+	bandt_algorithm_functor(memory_layout_t& memory) noexcept {}
 
 	unsigned int operator()(std::complex<double> r, unsigned int max_iterations);
 
@@ -37,10 +30,6 @@ struct bandt_algorithm_functor
 	}
 
 private:
-	std::vector<std::complex<double>>* t_n;
-	std::vector<std::complex<double>>* t_np1;
-
-	void generate_next_set(std::complex<double> r);
 
 	static std::complex<double> g0(std::complex<double> r, std::complex<double> t)
 	{
@@ -55,5 +44,10 @@ private:
 	static std::complex<double> gm1(std::complex<double> r, std::complex<double> t)
 	{
 		return (t - 1.0) / r;
+	}
+
+	std::array<dfs_iterator::generator_t, 3> generate_fns_for_tree(const std::complex<double>& r)
+	{
+		return { std::bind_front(g0, r), std::bind_front(g1, r), std::bind_front(gm1, r) };
 	}
 };
