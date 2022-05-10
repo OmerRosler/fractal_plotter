@@ -1,6 +1,8 @@
 #pragma once
 #include <concepts>
 #include <array>
+#include <memory>
+
 namespace frc
 {
     /* A concept that represents an algorithm to decide if a point is inside a fractal.
@@ -14,8 +16,7 @@ namespace frc
     template<typename F, typename ValueT>
     concept fractal_algorithm = std::regular_invocable<F, ValueT&, unsigned int> &&
         requires {
-        typename F::memory_layout_t;
-            requires std::constructible_from<F, typename F::memory_layout_t&>;
+                requires std::constructible_from<F, std::pmr::memory_resource*>;
             requires std::is_convertible_v<
                 std::invoke_result_t<F, ValueT&, unsigned int>,
                     unsigned int>;

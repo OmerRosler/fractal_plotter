@@ -1,6 +1,7 @@
 #pragma once
-#include "utils.hpp"
+#include <memory_resource>
 
+#include "utils.hpp"
 namespace frc
 {
 
@@ -24,9 +25,10 @@ run_algorithm_per_pixel(
 	unsigned int max_iterations)
 {
     // Initialize memory required to run the algorithm
-    typename IsInFractal::memory_layout_t alg_memory{};
+    const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
+    std::pmr::monotonic_buffer_resource pool{ dynamic_size };
 
-    IsInFractal algorithm(alg_memory);
+    IsInFractal algorithm(&pool);
 
     for (auto x = 0u; x < res.width; x++)
     {
@@ -65,9 +67,10 @@ std::generator<std::tuple<pixel_coordinates_t,
         unsigned int max_iterations)
 {
     // Initialize memory required to run the algorithm
-    typename IsInFractal::memory_layout_t alg_memory{};
+    const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
+    std::pmr::monotonic_buffer_resource pool{ dynamic_size };
 
-    IsInFractal algorithm(alg_memory);
+    IsInFractal algorithm(&pool);
 
     for (auto x = 0u; x < res.width; x++)
     {

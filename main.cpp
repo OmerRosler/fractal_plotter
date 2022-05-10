@@ -14,9 +14,14 @@ int main()
     //draw_M(std::format("pics/bandt_{}_depth_{}.bmp", m_pic_name, 20),
     //    m_res, m_dom, 20);
 
-    //draw_M("pics/M_debug.bmp",
-    //    resolution_t{ 600, 600 },
-    //    picture_domain_t{ .x{0, 1.0/std::sqrt(2)}, .y{0, 1.0 / std::sqrt(2)} }, 30);
+    draw_mandlebrot("pics/mandlebrot_debug.bmp",
+        resolution_t{ 600, 600 },
+        picture_domain_t{ .x{-1, 1}, .y{-1, 1 } },
+        100);
+
+    draw_M("pics/M_debug.bmp",
+        resolution_t{ 600, 600 },
+        picture_domain_t{ .x{0, 1.0/std::sqrt(2)}, .y{0, 1.0 / std::sqrt(2)} }, 30);
 
     draw_N("pics/N_debug.bmp",
         resolution_t{ 600, 600 },

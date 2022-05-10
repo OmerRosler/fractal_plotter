@@ -19,12 +19,12 @@ template<typename T,
 class recursive_tree_dfs_iterator
 {
 	const unsigned max_depth;
-	std::vector<T> previous_values;
-	std::vector<int> previous_ids;
+	std::pmr::vector<T> previous_values;
+	std::pmr::vector<int> previous_ids;
 	using value_generators_t = std::array<std::function<T(const T&)>, N>;
 	const value_generators_t new_value_generators;
 
-	recursive_tree_dfs_iterator(value_generators_t gens) : max_depth(0), 
+	recursive_tree_dfs_iterator(value_generators_t gens) noexcept: max_depth(0), 
 		new_value_generators(gens) {}
 
 	void traverse_up_until_not_last_child()
@@ -56,10 +56,11 @@ public:
 
 	recursive_tree_dfs_iterator(value_generators_t gens,
 		const T& start_value,
-		unsigned int max_depth) :
+		unsigned int max_depth,
+		std::pmr::memory_resource* rsc) :
 		max_depth(max_depth), 
-		previous_values{}, 
-		previous_ids{},
+		previous_values{rsc}, 
+		previous_ids{rsc},
 		new_value_generators(gens)
 	{
 		previous_values.reserve(max_depth + 1);
@@ -68,7 +69,8 @@ public:
 		this->reset(start_value, max_depth);
 	}
 	recursive_tree_dfs_iterator(value_generators_t gens, 
-		unsigned int max_depth) : recursive_tree_dfs_iterator(gens, {}, {}, max_depth) {}
+		unsigned int max_depth,
+		std::pmr::memory_resource* rsc) : recursive_tree_dfs_iterator(gens, {}, {}, max_depth, rsc) {}
 
 	recursive_tree_dfs_iterator(const recursive_tree_dfs_iterator&) = default;
 	recursive_tree_dfs_iterator(recursive_tree_dfs_iterator&&) = default;
