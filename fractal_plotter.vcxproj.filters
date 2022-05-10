@@ -71,5 +71,8 @@
     <ClInclude Include="N_drawer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="recursive_tree_dfs_iterator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

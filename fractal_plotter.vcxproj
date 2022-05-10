@@ -36,6 +36,7 @@
     <ClInclude Include="mandlebrot_algorithm.hpp" />
     <ClInclude Include="N_algorithm.hpp" />
     <ClInclude Include="N_drawer.hpp" />
+    <ClInclude Include="recursive_tree_dfs_iterator.hpp" />
     <ClInclude Include="run_algorithm_per_pixel.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="zoom_in_tool.hpp" />
