@@ -18,7 +18,10 @@ namespace frc
 template<complex_fractal_algorithm IsInFractal>
 std::generator<std::tuple<pixel_coordinates_t,
     std::complex<double>,
-    std::invoke_result_t<IsInFractal, std::complex<double>&, unsigned int>>>
+    std::invoke_result_t<IsInFractal, 
+        std::complex<double>&, 
+        unsigned int>
+    >>
 run_algorithm_per_pixel(
 	resolution_t res,
 	picture_domain_t domain,
@@ -26,7 +29,9 @@ run_algorithm_per_pixel(
 {
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
-    std::pmr::monotonic_buffer_resource pool{ dynamic_size };
+    std::pmr::unsynchronized_pool_resource 
+        pool(std::pmr::pool_options{ .max_blocks_per_chunk = 0, 
+        .largest_required_pool_block = dynamic_size });
 
     IsInFractal algorithm(&pool);
 
@@ -68,7 +73,9 @@ std::generator<std::tuple<pixel_coordinates_t,
 {
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
-    std::pmr::monotonic_buffer_resource pool{ dynamic_size };
+    std::pmr::unsynchronized_pool_resource
+        pool(std::pmr::pool_options{ .max_blocks_per_chunk = 0,
+        .largest_required_pool_block = dynamic_size });
 
     IsInFractal algorithm(&pool);
 
