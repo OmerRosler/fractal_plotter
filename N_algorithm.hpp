@@ -8,6 +8,8 @@
 * where (a,b) is the candidate point
 * 
 * ro = max{|a|,|b|}
+* 
+* and the cut-off value is sqrt(2)/(1-ro) instead of 1/(1-ro)
 */
 
 #include <vector>
@@ -73,7 +75,7 @@ public:
 	static bool stop_iterating_value(const r2vec_t& r, const r2vec_t& t)
 	{
 		const auto ro = std::max(std::abs(r.x), std::abs(r.y));
-		const auto cut_off = 1 / (1.0 - ro);
+		const auto cut_off = std::sqrt(2) / (1.0 - ro);
 
 		return t.abs() > cut_off;
 	}
