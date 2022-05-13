@@ -69,6 +69,12 @@ public:
 		return 1.0 / r;
 	}
 
+	static unsigned int effective_max_iterations(const std::complex<double>& r)
+	{
+		const auto ro = std::abs(r);
+		return std::llround(log1eps<double>() / std::log10(1.0 / ro));
+	}
+
 	/*If any translation vector `t`	satisfies this condition then there exists 
 	 * an internal point of M within `pixel_size/sqrt(2)` ball around `r`
 	 * And this means that we don't know whether the majority of points in this pixel

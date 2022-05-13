@@ -6,6 +6,7 @@
 #include <ranges>
 #include <concepts>
 #include <complex>
+#include <functional>
 
 #include "generator.hpp"
 #include "algorithm_concepts.hpp"
@@ -21,6 +22,12 @@ bool almost_equal(T x, T y, int ulp = 2)
     return std::fabs(x - y) <= std::numeric_limits<T>::epsilon() * std::fabs(x + y) * ulp
         // unless the result is subnormal
         || std::fabs(x - y) < std::numeric_limits<T>::min();
+}
+
+template<std::floating_point T>
+constexpr long long log1eps()
+{
+    return -std::numeric_limits<T>::min_exponent10;
 }
 
 /* An arithmetic and comparable type to represent R2 cartesian coordinates
@@ -161,7 +168,25 @@ struct picture_domain_t
     {
         return almost_equal(res.ratio(), x.length() / y.length());
     }
+
+    /* We want to find the radius of the minimal circle that contains
+    * an entire pixel given the resolution
+    */
+    long double min_bounding_radius_for_pixel(resolution_t res) const
+    {
+        return std::max(x.length() / res.width,
+            y.length() / res.height) / std::sqrt(2);
+    }
 };
+
+//Note std::move_only_function is C++23 which is too new at the moment
+#ifdef __cpp_lib_move_only_function
+template<typename T>
+using function_holder_t = std::move_only_function<T>;
+#else
+template<typename T>
+using function_holder_t = std::function<T>;
+#endif
 
 
 template<typename F>

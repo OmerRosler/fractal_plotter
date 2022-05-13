@@ -20,13 +20,16 @@ std::generator<std::tuple<pixel_coordinates_t,
     std::complex<double>,
     std::invoke_result_t<IsInFractal, 
         std::complex<double>&, 
-        unsigned int>
+        unsigned int,
+        long double>
     >>
 run_algorithm_per_pixel(
 	resolution_t res,
 	picture_domain_t domain,
 	unsigned int max_iterations)
 {
+    const auto pixel_size_bound = domain.min_bounding_radius_for_pixel(res);
+
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
     std::pmr::unsynchronized_pool_resource 
@@ -41,12 +44,13 @@ run_algorithm_per_pixel(
         {
             // r runs in constant steps across the pixels of the frame
             std::complex<double> r = 0;
-            r.real((domain.x.length() * x) / res.width + domain.x.start);
+            r.real((domain.x.length() * (x+0.5)) / res.width + domain.x.start);
             // y runs in reverse because of the plotting lib
-            r.imag(-domain.y.length() * y / res.height + domain.y.end);
+            //TODO: Make sure the sign of 0.5 is the correct one
+            r.imag(-domain.y.length() * (y- 0.5) / res.height + domain.y.end);
 
             // Apply the algorithm, note `r` might change after this line
-            auto i = std::invoke(algorithm, r, max_iterations);
+            auto i = std::invoke(algorithm, r, max_iterations, pixel_size_bound);
             co_yield{ {x,y}, r, i };
         }
     }
@@ -65,12 +69,14 @@ run_algorithm_per_pixel(
 template<r2_fractal_algorithm IsInFractal>
 std::generator<std::tuple<pixel_coordinates_t,
     r2vec_t,
-    std::invoke_result_t<IsInFractal, r2vec_t&, unsigned int>>>
+    std::invoke_result_t<IsInFractal, r2vec_t&, unsigned int, long double>>>
     run_algorithm_per_pixel(
         resolution_t res,
         picture_domain_t domain,
         unsigned int max_iterations)
 {
+    const auto pixel_size_bound = domain.min_bounding_radius_for_pixel(res);
+    
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
     std::pmr::unsynchronized_pool_resource
@@ -85,12 +91,13 @@ std::generator<std::tuple<pixel_coordinates_t,
         {
             // r runs in constant steps across the pixels of the frame
             // y runs in reverse because of the plotting lib
+            //TODO: Make sure the sign of 0.5 is the correct one
             r2vec_t r = {
-            ((domain.x.length() * x) / res.width + domain.x.start),
-            (-domain.y.length() * y / res.height + domain.y.end) };
+            ((domain.x.length() * (x+0.5)) / res.width + domain.x.start),
+            (-domain.y.length() * (y - 0.5) / res.height + domain.y.end) };
 
             // Apply the algorithm, note `r` might change after this line
-            auto i = std::invoke(algorithm, r, max_iterations);
+            auto i = std::invoke(algorithm, r, max_iterations, pixel_size_bound);
             co_yield{ {x,y}, r, i };
         }
     }

@@ -14,11 +14,11 @@ namespace frc
     * a point is in a trivial part of the fratal or its' complement.
     */
     template<typename F, typename ValueT>
-    concept fractal_algorithm = std::regular_invocable<F, ValueT&, unsigned int> &&
+    concept fractal_algorithm = std::regular_invocable<F, ValueT&, unsigned int, long double> &&
         requires {
                 requires std::constructible_from<F, std::pmr::memory_resource*>;
             requires std::is_convertible_v<
-                std::invoke_result_t<F, ValueT&, unsigned int>,
+                std::invoke_result_t<F, ValueT&, unsigned int, long double>,
                     unsigned int>;
     }&&
         requires(ValueT r)
