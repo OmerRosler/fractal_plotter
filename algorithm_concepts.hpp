@@ -40,8 +40,10 @@ namespace frc
     * 
     * The customization points of the algorithm are:
     * 1. The recursive generators of the orbit of a given candiate point
-    * 2. The cut off radius
+    * 2. The cut off radius for potential accumulation point
     * 3. The root of the orbit for a given candidate
+    * 4. The lower bound for translation vectors
+    *    needed to verify a pixel is entirely outside the fractal
     */
     template<typename F, typename ValueT, std::size_t N>
     concept bandt_like_fractal_algorithm = fractal_algorithm<F, ValueT> &&
@@ -52,9 +54,14 @@ namespace frc
 
             {F::generate_fns_for_tree(r)}->
                 std::convertible_to < typename F::dfs_iterator::generator_fns_container_t>;
+
             {F::stop_iterating_value(r, t)} ->
                 std::convertible_to<bool>;
+
             {F::root(r)} -> std::convertible_to<ValueT>;
+
+            {F::translation_vector_satsifies_bound_for_outside_point(r, double(), r, 0u)}  ->
+                std::convertible_to<bool>;
 
     };
 

@@ -84,6 +84,16 @@ public:
 	{
 		return { 1.0 / r.x, 1.0 / r.y };
 	}
+
+	static bool translation_vector_satsifies_bound_for_outside_point(
+		const r2vec_t& r,
+		double pixel_size,
+		const r2vec_t& t,
+		unsigned int depth)
+	{
+		//TODO: Find an analouge for N
+		return true;
+	}
 };
 
 }
