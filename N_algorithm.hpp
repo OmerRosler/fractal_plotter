@@ -91,7 +91,13 @@ public:
 		unsigned int depth)
 	{
 		//TODO: Find an analouge for N
-		return true;
+		return false;
+	}
+
+	static unsigned int effective_max_iterations(const r2vec_t& r)
+	{
+		//TODO
+		return std::numeric_limits<unsigned int>::max();
 	}
 };
 

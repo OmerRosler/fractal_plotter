@@ -22,13 +22,11 @@ class recursive_tree_dfs_iterator
 	std::pmr::vector<T> previous_values;
 	std::pmr::vector<int> previous_ids;
 public:
-//Note std::move_only_function is C++23 which is too new at the moment
-#ifdef __cpp_lib_move_only_function
-	using generator_t = std::move_only_function<T(const T&) const>;
-#else
-	using generator_t = std::function<T(const T&)>;
-#endif
+
+	using generator_t = function_holder_t<T(const T&) const>;
+
 	using generator_fns_container_t = std::array<generator_t, N>;
+
 private:
 	const generator_fns_container_t new_value_generators;
 
