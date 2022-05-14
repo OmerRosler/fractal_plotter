@@ -29,7 +29,6 @@ class N_algorithm_functor : public dfs_bandt_algorithm_functor<N_algorithm_funct
 	using base_t = dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>;
 	
 public:
-
 	N_algorithm_functor(std::pmr::memory_resource* rsc) noexcept: base_t(rsc) {}
 
 	static bool is_trivially_inside(r2vec_t r)

@@ -15,7 +15,9 @@ namespace frc
 *  - the magnitude of the value after escape
 *  - the index of escape
 */
-template<complex_fractal_algorithm IsInFractal>
+template<fractal_algorithm IsInFractal> 
+    requires std::same_as<typename IsInFractal::value_t, 
+    std::complex<double>>
 std::generator<std::tuple<pixel_coordinates_t,
     std::complex<double>,
     std::invoke_result_t<IsInFractal, 
@@ -62,7 +64,9 @@ run_algorithm_per_pixel(
 *  - the magnitude of the value after escape
 *  - the index of escape
 */
-template<r2_fractal_algorithm IsInFractal>
+template<fractal_algorithm IsInFractal>
+    requires std::same_as<typename IsInFractal::value_t,
+                            r2vec_t>
 std::generator<std::tuple<pixel_coordinates_t,
     r2vec_t,
     std::invoke_result_t<IsInFractal, r2vec_t&, unsigned int>>>

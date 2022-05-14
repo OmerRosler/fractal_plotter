@@ -13,10 +13,11 @@ protected:
 
 public:
 	using dfs_iterator = recursive_tree_dfs_iterator<T, N>;
+    using value_t = T;
 
 	dfs_bandt_algorithm_functor(std::pmr::memory_resource* memory) noexcept: memory(memory)
     {
-        static_assert(bandt_like_fractal_algorithm<Derived, T, N>);
+        static_assert(bandt_like_fractal_algorithm<Derived>);
     }
 
     static constexpr std::size_t approximate_maximal_dynamic_memory(unsigned int max_iterations)

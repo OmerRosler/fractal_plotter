@@ -60,6 +60,7 @@ private:
 
 public:
 
+	constexpr static std::size_t arity = N;
 
 	recursive_tree_dfs_iterator(generator_fns_container_t&& gens,
 		const T& start_value,
