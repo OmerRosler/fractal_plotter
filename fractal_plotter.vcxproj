@@ -33,6 +33,7 @@
     <ClInclude Include="bandt_algorithm.hpp" />
     <ClInclude Include="bandt_drawer.hpp" />
     <ClInclude Include="dfs_bandt_algorithm.hpp" />
+    <ClInclude Include="drawing_utils.hpp" />
     <ClInclude Include="mandlebrot_algorithm.hpp" />
     <ClInclude Include="N_algorithm.hpp" />
     <ClInclude Include="N_drawer.hpp" />

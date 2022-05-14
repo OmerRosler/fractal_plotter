@@ -14,7 +14,6 @@ class bandt_algorithm_functor :
 {
 	using base_t = dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>;
 public:
-
 	bandt_algorithm_functor(std::pmr::memory_resource* rsc) noexcept : base_t(rsc) {}
 
 	static bool is_trivially_inside(std::complex<double> r)

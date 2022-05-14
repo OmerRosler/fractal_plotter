@@ -13,6 +13,7 @@ unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterat
 
 struct mandlebrot_algorithm_functor
 {
+    using value_t = std::complex<double>;
     mandlebrot_algorithm_functor(std::pmr::memory_resource* rsc = nullptr) noexcept {};
     unsigned int operator()(std::complex<double>& c, unsigned int max_iterations) const
     {

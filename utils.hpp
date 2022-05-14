@@ -8,7 +8,10 @@
 #include <complex>
 
 #include "generator.hpp"
+#include "bitmap_image.hpp"
+
 #include "algorithm_concepts.hpp"
+
 namespace frc
 {
 /* General tool to compare floating point types
@@ -163,13 +166,10 @@ struct picture_domain_t
     }
 };
 
+using color_t = ::bitmap_image::rgb_t;
 
-template<typename F>
-concept complex_fractal_algorithm = fractal_algorithm < F, std::complex<double>>;
-
-
-template<typename F>
-concept r2_fractal_algorithm = fractal_algorithm < F, r2vec_t>;
+template<typename T>
+using pixel_painter_t = color_t(*)(unsigned int, const T&, unsigned int);
 
 /* A type that declares how much memory it requires will use it,
 *  otherwise don't pre-allocate anything
