@@ -4,17 +4,16 @@ namespace frc
 {
 void draw_M(
     const std::string& pic_path,
-    resolution_t res,
-    picture_domain_t domain,
+    image_metadata_t meta,
     unsigned int max_iterations)
 {
-    assert(domain.is_resolution_for_domain(res));
-    bitmap_image fractal_jet(res.width, res.height);
+    assert(meta.dom.is_resolution_for_domain(meta.res));
+    bitmap_image fractal_jet(meta.res.width, meta.res.height);
 
     fractal_jet.clear();
 
     for (auto&& [pixel, r, escape_index] :
-        run_algorithm_per_pixel<bandt_algorithm_functor>(res, domain, max_iterations))
+        run_algorithm_per_pixel<bandt_algorithm_functor>(meta, max_iterations))
     {
         if (bandt_algorithm_functor::is_trivially_inside(r))
         {

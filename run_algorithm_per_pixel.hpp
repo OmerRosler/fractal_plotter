@@ -24,11 +24,10 @@ std::generator<std::tuple<pixel_coordinates_t,
         long double>
     >>
 run_algorithm_per_pixel(
-	resolution_t res,
-	picture_domain_t domain,
-	unsigned int max_iterations)
+    image_metadata_t meta,
+    unsigned int max_iterations)
 {
-    const auto pixel_size_bound = domain.min_bounding_radius_for_pixel(res);
+    const auto pixel_size_bound = meta.dom.min_bounding_radius_for_pixel(meta.res);
 
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
@@ -38,20 +37,20 @@ run_algorithm_per_pixel(
 
     IsInFractal algorithm(&pool);
 
-    for (auto x = 0u; x < res.width; x++)
+    for (auto px = 0u; px < meta.res.width; px++)
     {
-        for (auto y = 0u; y < res.height; y++)
+        for (auto py = 0u; py < meta.res.height; py++)
         {
             // r runs in constant steps across the pixels of the frame
             std::complex<double> r = 0;
-            r.real((domain.x.length() * (x+0.5)) / res.width + domain.x.start);
+            auto r_vals = meta.pixel_value_from_id(px, py);
+            r.real(r_vals.first);
             // y runs in reverse because of the plotting lib
-            //TODO: Make sure the sign of 0.5 is the correct one
-            r.imag(-domain.y.length() * (y- 0.5) / res.height + domain.y.end);
+            r.imag(r_vals.second);
 
             // Apply the algorithm, note `r` might change after this line
             auto i = std::invoke(algorithm, r, max_iterations, pixel_size_bound);
-            co_yield{ {x,y}, r, i };
+            co_yield{ {px,py}, r, i };
         }
     }
 }
@@ -71,11 +70,10 @@ std::generator<std::tuple<pixel_coordinates_t,
     r2vec_t,
     std::invoke_result_t<IsInFractal, r2vec_t&, unsigned int, long double>>>
     run_algorithm_per_pixel(
-        resolution_t res,
-        picture_domain_t domain,
+        image_metadata_t meta,
         unsigned int max_iterations)
 {
-    const auto pixel_size_bound = domain.min_bounding_radius_for_pixel(res);
+    const auto pixel_size_bound = meta.dom.min_bounding_radius_for_pixel(meta.res);
     
     // Initialize memory required to run the algorithm
     const auto dynamic_size = caclulate_pre_allocation_buffer_size<IsInFractal>(max_iterations);
@@ -85,20 +83,17 @@ std::generator<std::tuple<pixel_coordinates_t,
 
     IsInFractal algorithm(&pool);
 
-    for (auto x = 0u; x < res.width; x++)
+    for (auto px = 0u; px < meta.res.width; px++)
     {
-        for (auto y = 0u; y < res.height; y++)
+        for (auto py = 0u; py < meta.res.height; py++)
         {
             // r runs in constant steps across the pixels of the frame
             // y runs in reverse because of the plotting lib
-            //TODO: Make sure the sign of 0.5 is the correct one
-            r2vec_t r = {
-            ((domain.x.length() * (x+0.5)) / res.width + domain.x.start),
-            (-domain.y.length() * (y - 0.5) / res.height + domain.y.end) };
+            r2vec_t r = to_struct<r2vec_t>(meta.pixel_value_from_id(px, py));
 
             // Apply the algorithm, note `r` might change after this line
             auto i = std::invoke(algorithm, r, max_iterations, pixel_size_bound);
-            co_yield{ {x,y}, r, i };
+            co_yield{ {px,py}, r, i };
         }
     }
 }

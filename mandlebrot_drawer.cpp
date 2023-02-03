@@ -4,17 +4,16 @@ namespace frc
 {
 void draw_mandlebrot(
     const std::string& pic_path,
-    resolution_t res,
-    picture_domain_t domain,
+    image_metadata_t meta,
     unsigned int max_iterations)
 {
-    assert(domain.is_resolution_for_domain(res));
-    bitmap_image fractal_jet(res.width, res.height);
+    assert(domain.is_resolution_for_domain(meta.res));
+    bitmap_image fractal_jet(meta.res.width, meta.res.height);
 
     fractal_jet.clear();
 
     for (auto&& [pixel, escape_val, escape_index] :
-        run_algorithm_per_pixel<mandlebrot_algorithm_functor>(res, domain, max_iterations))
+        run_algorithm_per_pixel<mandlebrot_algorithm_functor>(meta, max_iterations))
     {
         // The pixel did NOT escape and is inside the Mandlebrot set
         if (escape_index == max_iterations)

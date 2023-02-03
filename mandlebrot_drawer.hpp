@@ -9,7 +9,6 @@ namespace frc
 */
 void draw_mandlebrot(
     const std::string& pic_path, 
-    resolution_t res,
-    picture_domain_t domain,
+    image_metadata_t meta,
     unsigned int max_iterations);
 }
