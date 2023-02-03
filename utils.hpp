@@ -7,6 +7,8 @@
 #include <concepts>
 #include <complex>
 #include <functional>
+#include <type_traits>
+#include <tuple>
 
 #include "generator.hpp"
 #include "bitmap_image.hpp"
@@ -26,6 +28,26 @@ bool almost_equal(T x, T y, int ulp = 2)
         // unless the result is subnormal
         || std::fabs(x - y) < std::numeric_limits<T>::min();
 }
+
+
+template<class S, std::size_t...Is, class Tup>
+S to_struct_impl(std::index_sequence<Is...>, Tup&& tup) {
+    using std::get;
+    return { get<Is>(std::forward<Tup>(tup))... };
+}
+/*
+* Utility function to convert tuple to struct
+*/
+template<class S, class Tup>
+S to_struct(Tup&& tup) {
+    using T = std::remove_reference_t<Tup>;
+
+    return to_struct_impl<S>(
+        std::make_index_sequence < std::tuple_size<T>{} > {},
+        std::forward<Tup>(tup)
+    );
+}
+
 
 template<std::floating_point T>
 constexpr long long log1eps()
@@ -181,6 +203,31 @@ struct picture_domain_t
             y.length() / res.height) / std::sqrt(2);
     }
 };
+
+//This is the metadata used to represent an image
+struct image_metadata_t
+{
+    resolution_t res;
+    picture_domain_t dom;
+
+    //Used to convert a point in R2 to the pixel id in the image
+    std::pair<unsigned int, unsigned int> pixel_id_from_value(double x, double y) const
+    {
+        return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5),
+        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5) };
+    }
+
+    //Used to convert pixel id to the point in R2 it represents in the image
+    std::pair<double, double> pixel_value_from_id(unsigned int px, unsigned int py) const
+    {
+        return {
+            ((dom.x.length() * (px + 0.5)) / res.width + dom.x.start),
+            (-dom.y.length() * (py - 0.5) / res.height + dom.y.end)
+        };
+    }
+
+};
+
 
 //Note std::move_only_function is C++23 which is too new at the moment
 #ifdef __cpp_lib_move_only_function

@@ -14,12 +14,12 @@ color_t N_pixel_color(unsigned int max_iterations,
 */
 inline void draw_N(
     const std::string& pic_path,
-    resolution_t res,
-    picture_domain_t domain,
+	image_metadata_t meta,
     unsigned int max_iterations)
 {
     draw_fractal< N_algorithm_functor>
-        (pic_path, res, domain, max_iterations, N_pixel_color);
+        (pic_path, meta, max_iterations, N_pixel_color);
+
 }
 
 }
