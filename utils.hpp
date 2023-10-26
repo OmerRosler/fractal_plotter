@@ -271,10 +271,13 @@ struct image_metadata_t
     picture_domain_t dom;
 
     //Used to convert a point in R2 to the pixel id in the image
-    std::pair<unsigned int, unsigned int> pixel_id_from_value(double x, double y) const
+    std::pair<int, int> pixel_id_from_value(double x, double y) const
     {
-        return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5)+1,
-        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5)+1 };
+        //TODO: Why was I adding 0.5 and 1?
+        /*return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5)+1,
+        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5)+1 };*/
+        return { std::floor(res.width * (x - dom.x.start) / dom.x.length()),
+        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()))};
     }
 
     //Used to convert pixel id to the point in R2 it represents in the image

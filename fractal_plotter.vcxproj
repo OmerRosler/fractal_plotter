@@ -28,7 +28,6 @@
     <ClCompile Include="generator.hpp" />
     <ClCompile Include="MPA_algorithm.cpp" />
     <ClCompile Include="N_drawer.cpp" />
-    <ClCompile Include="parabolic_ifs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm_concepts.hpp" />

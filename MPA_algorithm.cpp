@@ -3,12 +3,35 @@
 
 namespace frc
 {
+bool will_not_be_in_domain(interval_t idom, double point, unsigned int exp, double param)
+{
+    bool cond = false;
+    //TODO: Calculate powers of the param in advance
+    auto pm = std::pow(param, exp);
+    if (point < idom.start)
+    {
+        cond = ((idom.start - pm * point) > ((1 - pm) / (1 - param)));
+    }
+    else if (point > idom.end)
+    {
+        cond = ((pm * point - idom.end) > (1 - pm) / (1 - param));
+    }
+    return cond;
+}
+
+bool will_not_be_in_domain(picture_domain_t dom, r2vec_t point, unsigned int exp, r2vec_t param)
+{
+    return will_not_be_in_domain(dom.x, point.x, exp, param.x) ||
+        will_not_be_in_domain(dom.y, point.y, exp, param.y);
+}
+
 
 void draw_entire_attractor(
     const std::string& pic_path,
     image_metadata_t meta,
     unsigned int max_iterations,
-    std::vector<ifs_map_data_t> ifs)
+    std::vector<ifs_map_data_t> ifs,
+    const r2vec_t& param)
 {
     assert(meta.dom.is_resolution_for_domain(meta.res));
     bitmap_image fractal_jet(meta.res.width, meta.res.height);
@@ -34,11 +57,21 @@ void draw_entire_attractor(
 
         auto coords = meta.pixel_id_from_value(point.x, point.y);
 
+
         //Mark the point inside
         if (meta.dom.is_in_range(point))
         {
+            assert(coords.first >= 0 && coords.first <= meta.res.width, "x");
+            assert(coords.second >= 0 && coords.second <= meta.res.height, "y");
             frame[coords.first][coords.second] = 1;
         }
+
+        if (will_not_be_in_domain(meta.dom, point, max_iterations - num_iterations, param))
+        {
+            inside_pixels.pop();
+            continue;
+        }
+
         //Apply all maps to the point and add them to the queue
         for (auto&& [ifs_map, _] : ifs)
         {

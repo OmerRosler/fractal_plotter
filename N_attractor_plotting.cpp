@@ -46,10 +46,11 @@ void plot_entire_N_attractor(frc::r2vec_t param,
     frc::draw_entire_attractor(
         pic_path,
         {   res,
-            frc::picture_domain_t{ .x{-bound, bound}, .y{-bound,bound} }
+            frc::picture_domain_t{ .x{-bound/3, bound/3}, .y{-bound/3,bound/3} }
         }, 
-        20, 
-        std::move(ifs));
+        max_iterations,
+        std::move(ifs),
+        param);
     
 }
 }

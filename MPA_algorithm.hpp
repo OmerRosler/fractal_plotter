@@ -10,6 +10,9 @@ TODOs:
 2. Organize the code: move the algorithm to a struct with state-machine
 3. Add a frame data structure
 4. Add zoom-in facility by "adaptive cut" type algorithm
+5. For the zoom-in facility in `N` attractor we need to know the parameter,
+therefore if we want a generic algorithm it needs a templated `will_not_be_in_domain`
+we need algorithm concepts etc. maybe just use `if constexpr` for the existence of the function for a given type
 */
 namespace frc
 {
@@ -31,5 +34,6 @@ void draw_entire_attractor(
     const std::string& pic_path,
     image_metadata_t meta,
     unsigned int max_iterations,
-    std::vector<ifs_map_data_t> ifs);
+    std::vector<ifs_map_data_t> ifs,
+    const r2vec_t& param);
 }

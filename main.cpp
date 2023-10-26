@@ -35,7 +35,7 @@ int main()
 
     frc::r2vec_t param = { 1 / 1.35, 1 / 1.55 };
     plot_entire_N_attractor(param,
-        "pics/attractor_test800_repeat.bmp",
+        "pics/filter_test.bmp",
         frc::resolution_t{ 800, 800 },
         20);
 
