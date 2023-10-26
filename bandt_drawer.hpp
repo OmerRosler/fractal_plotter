@@ -13,12 +13,11 @@ color_t M_pixel_color(unsigned int max_iterations,
 */
 inline void draw_M(
     const std::string& pic_path,
-    resolution_t res,
-    picture_domain_t domain,
+	image_metadata_t meta,
     unsigned int max_iterations)
 {
     draw_fractal< bandt_algorithm_functor>
-        (pic_path, res, domain, max_iterations, M_pixel_color);
+        (pic_path, meta, max_iterations, M_pixel_color);
 }
 
 

@@ -18,7 +18,8 @@ public:
 
 	static bool is_trivially_inside(std::complex<double> r)
 	{
-		return std::norm(r) > 0.5;
+		auto nrm = std::norm(r);
+		return (nrm > 0.5) && (nrm < 1);
 	}
 
 	static bool is_trivially_outside(std::complex<double> r)
@@ -66,6 +67,40 @@ public:
 	static std::complex<double> root(const std::complex<double>& r)
 	{
 		return 1.0 / r;
+	}
+
+	static unsigned int effective_max_iterations(const std::complex<double>& r)
+	{
+		const auto ro = std::abs(r);
+		return std::llround(log1eps<double>() / std::log10(1.0 / ro));
+	}
+
+	/*If any translation vector `t`	satisfies this condition then there exists 
+	 * an internal point of M within `pixel_size/sqrt(2)` ball around `r`
+	 * And this means that we don't know whether the majority of points in this pixel
+	 * are outside or inside.
+	 * Therefore we decide to draw them black as we want the white part to be the real outside
+	 * 
+	 * The invariant of the algorithm is that a white pixel is deterministically contained in the
+	 * outside of the fractal
+	 * 
+	 * The explicit bound is Theorem 9.4 of Bandt's paper
+	*/
+	static bool translation_vector_satsifies_bound_for_outside_point(
+		const std::complex<double>& r,
+		double pixel_size, 
+		const std::complex<double>& t, 
+		unsigned int depth)
+	{
+		const auto ro = std::abs(r);
+		const auto ro_prime = ro + pixel_size;
+		const auto constant_term = (1 + ro) / (1 - ro);
+		const auto dependent_term = std::pow(1.0 / ro, depth);
+
+		const auto bound = 2 * pixel_size * dependent_term / ((1 - ro) * (1 - ro_prime)) + constant_term;
+
+		assert(!almost_equal(bound, 0.0));
+		return (std::abs(t) >= bound);
 	}
 };
 }

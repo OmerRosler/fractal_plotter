@@ -13,12 +13,11 @@ color_t mandlebrot_pixel_color(unsigned int max_iterations,
 */
 inline void draw_mandlebrot(
     const std::string& pic_path,
-    resolution_t res,
-    picture_domain_t domain,
+    image_metadata_t meta,
     unsigned int max_iterations)
 {
     draw_fractal< mandlebrot_algorithm_functor>
-        (pic_path, res, domain, max_iterations, mandlebrot_pixel_color);
+        (pic_path, meta, max_iterations, mandlebrot_pixel_color);
 }
 
 

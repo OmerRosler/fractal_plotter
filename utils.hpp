@@ -6,6 +6,9 @@
 #include <ranges>
 #include <concepts>
 #include <complex>
+#include <functional>
+#include <type_traits>
+#include <tuple>
 
 #include "generator.hpp"
 #include "bitmap_image.hpp"
@@ -26,6 +29,32 @@ bool almost_equal(T x, T y, int ulp = 2)
         || std::fabs(x - y) < std::numeric_limits<T>::min();
 }
 
+
+template<class S, std::size_t...Is, class Tup>
+S to_struct_impl(std::index_sequence<Is...>, Tup&& tup) {
+    using std::get;
+    return { get<Is>(std::forward<Tup>(tup))... };
+}
+/*
+* Utility function to convert tuple to struct
+*/
+template<class S, class Tup>
+S to_struct(Tup&& tup) {
+    using T = std::remove_reference_t<Tup>;
+
+    return to_struct_impl<S>(
+        std::make_index_sequence < std::tuple_size<T>{} > {},
+        std::forward<Tup>(tup)
+    );
+}
+
+
+template<std::floating_point T>
+constexpr long long log1eps()
+{
+    return -std::numeric_limits<T>::min_exponent10;
+}
+
 /* An arithmetic and comparable type to represent R2 cartesian coordinates
 */
 
@@ -41,6 +70,11 @@ struct r2vec_t
     friend bool operator!=(const r2vec_t& v, const r2vec_t& u)
     {
         return !(u == v);
+    }
+
+    friend double distance(const r2vec_t& a, const r2vec_t& b)
+    {
+        return (a - b).abs();
     }
 
     double norm() const
@@ -86,6 +120,18 @@ struct r2vec_t
         y /= v.y;
         return *this;
     }
+    r2vec_t& operator+=(double scalar)&
+    {
+        x += scalar;
+        y += scalar;
+        return *this;
+    }
+    r2vec_t& operator-=(double scalar)&
+    {
+        x -= scalar;
+        y -= scalar;
+        return *this;
+    }
     r2vec_t& operator*=(double scalar)&
     {
         x *= scalar;
@@ -98,6 +144,11 @@ struct r2vec_t
         x /= scalar;
         y /= scalar;
         return *this;
+    }
+
+    r2vec_t operator-() const
+    {
+        return { -x, -y };
     }
 
     r2vec_t operator+(const r2vec_t& v) const
@@ -118,14 +169,43 @@ struct r2vec_t
         assert(v.y != 0);
         return { x / v.x, y / v.y };
     }
+
+
+    r2vec_t operator+(double scalar) const
+    {
+        return { x + scalar, y + scalar };
+    }
+    friend r2vec_t operator+(double scalar, const r2vec_t& self)
+    {
+        return self + scalar;
+    }
+
+    r2vec_t operator-(double scalar) const
+    {
+        return { x - scalar, y - scalar };
+    }
+    friend r2vec_t operator-(double scalar, const r2vec_t& self)
+    {
+        return (- self) + scalar;
+    }
+
     r2vec_t operator*(double scalar) const
     {
         return { x * scalar, y * scalar };
     }
+    friend r2vec_t operator*(double scalar, const r2vec_t& self)
+    {
+        return self * scalar;
+    }
+
     r2vec_t operator/(double scalar) const
     {
         assert(scalar != 0);
         return { x / scalar, y / scalar };
+    }
+    friend r2vec_t operator/(double scalar, const r2vec_t& self)
+    {
+        return { scalar / self.x, scalar / self.y };
     }
 };
 
@@ -140,7 +220,7 @@ struct resolution_t
     unsigned int width;
     unsigned int height;
 
-    double ratio() const { return double(width) / height; }
+    inline double ratio() const { return double(width) / height; }
 };
 
 struct interval_t
@@ -148,7 +228,12 @@ struct interval_t
     double start;
     double end;
 
-    double length() const { return end - start; }
+    inline double length() const { return end - start; }
+
+    inline bool is_inside(double d) const
+    {
+        return (d >= start) && (d <= end);
+    }
 };
 
 
@@ -158,16 +243,65 @@ struct picture_domain_t
     interval_t x;
     interval_t y;
 
-    double area() const { return x.length() * y.length(); }
+    inline double area() const { return x.length() * y.length(); }
 
-    bool is_resolution_for_domain(resolution_t res) const
+    inline bool is_resolution_for_domain(resolution_t res) const
     {
         return almost_equal(res.ratio(), x.length() / y.length());
     }
+    inline bool is_in_range(const r2vec_t& vec) const
+    {
+        return x.is_inside(vec.x) && y.is_inside(vec.y);
+    }
+
+    /* We want to find the radius of the minimal circle that contains
+    * an entire pixel given the resolution
+    */
+    inline long double min_bounding_radius_for_pixel(resolution_t res) const
+    {
+        return std::max(x.length() / res.width,
+            y.length() / res.height) / std::sqrt(2);
+    }
 };
 
+//This is the metadata used to represent an image
+struct image_metadata_t
+{
+    resolution_t res;
+    picture_domain_t dom;
+
+    //Used to convert a point in R2 to the pixel id in the image
+    std::pair<unsigned int, unsigned int> pixel_id_from_value(double x, double y) const
+    {
+        return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5),
+        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5) };
+    }
+
+    //Used to convert pixel id to the point in R2 it represents in the image
+    std::pair<double, double> pixel_value_from_id(unsigned int px, unsigned int py) const
+    {
+        return {
+            ((dom.x.length() * (px + 0.5)) / res.width + dom.x.start),
+            (-dom.y.length() * (py - 0.5) / res.height + dom.y.end)
+        };
+    }
+
+};
+
+
+//Note std::move_only_function is C++23 which is too new at the moment
+#ifdef __cpp_lib_move_only_function
+template<typename T>
+using function_holder_t = std::move_only_function<T>;
+#else
+template<typename T>
+using function_holder_t = std::function<T>;
+#endif
 using color_t = ::bitmap_image::rgb_t;
 
+
+template<typename F>
+concept complex_fractal_algorithm = fractal_algorithm < F, std::complex<double>>;
 template<typename T>
 using pixel_painter_t = color_t(*)(unsigned int, const T&, unsigned int);
 
