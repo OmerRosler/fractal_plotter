@@ -27,7 +27,7 @@ int main()
     std::complex potential_pt = { 0.602771333745229, 0.7501489829916319 };
     auto [res, dom, pic_name] = 
         generate_domain_and_resolution(potential_pt, 0.01);
-    draw_N("pics/candidate_pt.bmp", { res, dom }, 40);
+    draw_N("pics/candidate_pt.bmp", { res, dom }, 30);
     //draw_N("pics/N_debug.bmp",
     //    {resolution_t{ 600, 600 },
     //    picture_domain_t{ .x{0.5,1}, .y{0.5,1} }}, 20);

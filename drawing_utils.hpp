@@ -30,7 +30,7 @@ void draw_fractal(
     fractal_jet.clear();
 
     for (auto&& [pixel, r, escape_index] :
-        run_algorithm_per_pixel<IsInFractal>(meta.res, meta.dom, max_iterations))
+        run_algorithm_per_pixel<IsInFractal>(meta, max_iterations))
     {
         color_t result_color = paint_fn(max_iterations, r, escape_index);
         fractal_jet.set_pixel(pixel.x, pixel.y, result_color);

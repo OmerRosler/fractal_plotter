@@ -72,6 +72,11 @@ struct r2vec_t
         return !(u == v);
     }
 
+    friend double distance(const r2vec_t& a, const r2vec_t& b)
+    {
+        return (a - b).abs();
+    }
+
     double norm() const
     {
         return x * x + y * y;
@@ -115,6 +120,18 @@ struct r2vec_t
         y /= v.y;
         return *this;
     }
+    r2vec_t& operator+=(double scalar)&
+    {
+        x += scalar;
+        y += scalar;
+        return *this;
+    }
+    r2vec_t& operator-=(double scalar)&
+    {
+        x -= scalar;
+        y -= scalar;
+        return *this;
+    }
     r2vec_t& operator*=(double scalar)&
     {
         x *= scalar;
@@ -127,6 +144,11 @@ struct r2vec_t
         x /= scalar;
         y /= scalar;
         return *this;
+    }
+
+    r2vec_t operator-() const
+    {
+        return { -x, -y };
     }
 
     r2vec_t operator+(const r2vec_t& v) const
@@ -147,14 +169,43 @@ struct r2vec_t
         assert(v.y != 0);
         return { x / v.x, y / v.y };
     }
+
+
+    r2vec_t operator+(double scalar) const
+    {
+        return { x + scalar, y + scalar };
+    }
+    friend r2vec_t operator+(double scalar, const r2vec_t& self)
+    {
+        return self + scalar;
+    }
+
+    r2vec_t operator-(double scalar) const
+    {
+        return { x - scalar, y - scalar };
+    }
+    friend r2vec_t operator-(double scalar, const r2vec_t& self)
+    {
+        return (- self) + scalar;
+    }
+
     r2vec_t operator*(double scalar) const
     {
         return { x * scalar, y * scalar };
     }
+    friend r2vec_t operator*(double scalar, const r2vec_t& self)
+    {
+        return self * scalar;
+    }
+
     r2vec_t operator/(double scalar) const
     {
         assert(scalar != 0);
         return { x / scalar, y / scalar };
+    }
+    friend r2vec_t operator/(double scalar, const r2vec_t& self)
+    {
+        return { scalar / self.x, scalar / self.y };
     }
 };
 
@@ -169,7 +220,7 @@ struct resolution_t
     unsigned int width;
     unsigned int height;
 
-    double ratio() const { return double(width) / height; }
+    inline double ratio() const { return double(width) / height; }
 };
 
 struct interval_t
@@ -177,7 +228,12 @@ struct interval_t
     double start;
     double end;
 
-    double length() const { return end - start; }
+    inline double length() const { return end - start; }
+
+    inline bool is_inside(double d) const
+    {
+        return (d >= start) && (d <= end);
+    }
 };
 
 
@@ -187,17 +243,21 @@ struct picture_domain_t
     interval_t x;
     interval_t y;
 
-    double area() const { return x.length() * y.length(); }
+    inline double area() const { return x.length() * y.length(); }
 
-    bool is_resolution_for_domain(resolution_t res) const
+    inline bool is_resolution_for_domain(resolution_t res) const
     {
         return almost_equal(res.ratio(), x.length() / y.length());
+    }
+    inline bool is_in_range(const r2vec_t& vec) const
+    {
+        return x.is_inside(vec.x) && y.is_inside(vec.y);
     }
 
     /* We want to find the radius of the minimal circle that contains
     * an entire pixel given the resolution
     */
-    long double min_bounding_radius_for_pixel(resolution_t res) const
+    inline long double min_bounding_radius_for_pixel(resolution_t res) const
     {
         return std::max(x.length() / res.width,
             y.length() / res.height) / std::sqrt(2);
