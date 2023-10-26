@@ -7,7 +7,7 @@ void draw_mandlebrot(
     image_metadata_t meta,
     unsigned int max_iterations)
 {
-    assert(domain.is_resolution_for_domain(meta.res));
+    assert(meta.dom.is_resolution_for_domain(meta.res));
     bitmap_image fractal_jet(meta.res.width, meta.res.height);
 
     fractal_jet.clear();

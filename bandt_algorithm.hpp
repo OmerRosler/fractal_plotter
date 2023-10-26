@@ -19,7 +19,8 @@ public:
 
 	static bool is_trivially_inside(std::complex<double> r)
 	{
-		return std::norm(r) > 0.5;
+		auto nrm = std::norm(r);
+		return (nrm > 0.5) && (nrm < 1);
 	}
 
 	static bool is_trivially_outside(std::complex<double> r)
