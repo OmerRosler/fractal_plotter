@@ -52,7 +52,7 @@ namespace frc
         typename F::dfs_iterator;
         {F::dfs_iterator::arity} -> std::convertible_to<std::size_t>;
         typename recursive_tree_dfs_iterator<typename F::value_t, F::dfs_iterator::arity >;
-        requires std::convertible_to<typename F::dfs_iterator, 
+        std::convertible_to<typename F::dfs_iterator, 
             recursive_tree_dfs_iterator<typename F::value_t, F::dfs_iterator::arity>>;
 
             {F::generate_fns_for_tree(r)}->
