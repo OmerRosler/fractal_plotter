@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="N_attractor_plotting.cpp" />
     <ClCompile Include="bandt_drawer.cpp" />
-    <ClCompile Include="bitmap_image.hpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mandlebrot_algorithm.cpp" />
     <ClCompile Include="mandlebrot_drawer.cpp" />
@@ -32,10 +32,13 @@
     <ClInclude Include="algorithm_concepts.hpp" />
     <ClInclude Include="bandt_algorithm.hpp" />
     <ClInclude Include="bandt_drawer.hpp" />
+    <ClCompile Include="bitmap_image.hpp" />
     <ClInclude Include="dfs_bandt_algorithm.hpp" />
     <ClInclude Include="drawing_utils.hpp" />
     <ClInclude Include="mandlebrot_algorithm.hpp" />
+    <ClInclude Include="MPA_algorithm.hpp" />
     <ClInclude Include="N_algorithm.hpp" />
+    <ClInclude Include="N_attractor_plotting.hpp" />
     <ClInclude Include="N_drawer.hpp" />
     <ClInclude Include="recursive_tree_dfs_iterator.hpp" />
     <ClInclude Include="run_algorithm_per_pixel.hpp" />

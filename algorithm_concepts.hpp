@@ -68,7 +68,36 @@ concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
             std::convertible_to<bool>;
 
 };
+struct ifs_map_data_t;
+struct picture_domain_t;
+struct r2vec_t;
+/*
+* The minimal information required for an IFS attractor plotting
+* using the Minimal Plotting algorithm:
+* Create a FIFO structure of points definitely inside and apply all maps 
+* on them
+* 
+* There is a modification of the algorithm when we zoom-in -- 
+* the ability to skip points if they will never reach the frame.
+* This is encapsulated in the second concept
+*/
+template<typename Alg>
+concept MPA_algorithm_like = requires(Alg alg) {
+    {alg.ifs} -> std::ranges::range;
+    std::convertible_to<std::ranges::range_value_t<decltype(alg.ifs)>, 
+        ifs_map_data_t>;
+};
 
+template<typename Alg>
+concept skippable_MPA_algorithm_like = MPA_algorithm_like<Alg> &&
+    requires(Alg && alg, 
+    picture_domain_t & dom, 
+    r2vec_t point, 
+    unsigned int num_iterations)
+{
+    {alg.will_not_be_in_domain(dom, point, num_iterations)} -> 
+        std::convertible_to<bool>;
+};
 
 
 }
