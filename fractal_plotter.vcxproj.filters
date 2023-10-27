@@ -42,9 +42,6 @@
     <ClCompile Include="N_attractor_plotting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MPA_algorithm.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="utils.hpp">

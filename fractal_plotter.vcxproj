@@ -26,7 +26,6 @@
     <ClCompile Include="mandlebrot_drawer.cpp" />
     <ClCompile Include="mandlebrot_drawer.hpp" />
     <ClCompile Include="generator.hpp" />
-    <ClCompile Include="MPA_algorithm.cpp" />
     <ClCompile Include="N_drawer.cpp" />
   </ItemGroup>
   <ItemGroup>

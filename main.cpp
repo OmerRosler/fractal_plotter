@@ -34,8 +34,8 @@ int main()
     //    picture_domain_t{ .x{0.5,1}, .y{0.5,1} }}, 20);
 
     frc::r2vec_t param = { 1 / 1.35, 1 / 1.55 };
-    plot_entire_N_attractor(param,
-        "pics/filter_test.bmp",
+    plot_partial_N_attractor(param,
+        "pics/filter_test_10.bmp",
         frc::resolution_t{ 800, 800 },
         20);
 
