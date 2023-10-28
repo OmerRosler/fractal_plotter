@@ -5,7 +5,7 @@ export module frc.drawing:base;
 import bitmap_image;
 
 export import frc.utils;
-export import frc.algorithm;
+export import frc.algorithms;
 
 namespace frc
 {

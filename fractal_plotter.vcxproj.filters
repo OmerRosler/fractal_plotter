@@ -1,97 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
     </Filter>
+    <Filter Include="Module Interface Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Module Implementation Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Module Interface Files\General Tools">
+      <UniqueIdentifier>{af3c80ef-13f6-432c-b506-007dfff6883f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\Primary Modules">
+      <UniqueIdentifier>{96b0ff16-424d-4d4c-8a90-e6f19a058eaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\Mandelbrot Set">
+      <UniqueIdentifier>{415b4538-4191-424a-b418-6382081ed3a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\M">
+      <UniqueIdentifier>{d47e3936-0530-4fb2-901c-401afbd60861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\N">
+      <UniqueIdentifier>{6bbe8f2a-8556-471a-af8e-f19367abe4aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\Attractor">
+      <UniqueIdentifier>{5cb25fdc-6346-49ba-b74c-94d41e6b63bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module Interface Files\Modified External Libraries">
+      <UniqueIdentifier>{ba31573f-c2dd-473c-ab08-ff360e6c6dfc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="generator.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mandelbrot_drawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bandt_drawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="N_drawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bitmap_image.ixx">
-      <Filter>Header Files</Filter>
+      <Filter>Module Implementation Files</Filter>
     </ClCompile>
     <ClCompile Include="N_attractor_algo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="N_attractor_algo.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MPA_algorithm.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="algorithm.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="drawing_utils.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="algorithm_concepts.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="recursive_tree_dfs_iterator.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mandelbrot_algorithm.ixx">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="dfs_bandt_algorithm.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="N_algorithm.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="N_drawer.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bandt_algorithm.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bandt_drawer.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mandelbrot_drawer.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="zoom_in_tool.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="type_utils.ixx">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClCompile Include="drawing_base.ixx">
-      <Filter>Header Files</Filter>
+      <Filter>Module Implementation Files</Filter>
     </ClCompile>
     <ClCompile Include="algorithm_base.ixx">
-      <Filter>Header Files</Filter>
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithm_concepts.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="bandt_algorithm.ixx">
+      <Filter>Module Interface Files\M</Filter>
+    </ClCompile>
+    <ClCompile Include="bandt_drawer.ixx">
+      <Filter>Module Interface Files\M</Filter>
+    </ClCompile>
+    <ClCompile Include="dfs_bandt_algorithm.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing_base.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing.ixx">
+      <Filter>Module Interface Files\Primary Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="generator.ixx">
+      <Filter>Module Interface Files\Modified External Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="bitmap_image.ixx">
+      <Filter>Module Interface Files\Modified External Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="mandelbrot_drawer.ixx">
+      <Filter>Module Interface Files\Mandelbrot Set</Filter>
+    </ClCompile>
+    <ClCompile Include="MPA_algorithm.ixx">
+      <Filter>Module Interface Files\Attractor</Filter>
+    </ClCompile>
+    <ClCompile Include="N_algorithm.ixx">
+      <Filter>Module Interface Files\N</Filter>
+    </ClCompile>
+    <ClCompile Include="N_attractor_algo.ixx">
+      <Filter>Module Interface Files\Attractor</Filter>
     </ClCompile>
     <ClCompile Include="N_attractor_drawing.ixx">
-      <Filter>Header Files</Filter>
+      <Filter>Module Interface Files\Attractor</Filter>
+    </ClCompile>
+    <ClCompile Include="N_drawer.ixx">
+      <Filter>Module Interface Files\N</Filter>
+    </ClCompile>
+    <ClCompile Include="recursive_tree_dfs_iterator.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithms.ixx">
+      <Filter>Module Interface Files\Primary Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="type_utils.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="utils.ixx">
+      <Filter>Module Interface Files\Primary Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="zoom_in_tool.ixx">
+      <Filter>Module Interface Files\General Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="mandelbrot_algorithm.ixx">
+      <Filter>Module Interface Files\Mandelbrot Set</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

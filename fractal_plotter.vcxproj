@@ -22,15 +22,12 @@
     <ClCompile Include="algorithm_base.ixx" />
     <ClCompile Include="drawing_base.ixx" />
     <ClCompile Include="N_attractor_algo.cpp" />
-    <ClCompile Include="bandt_drawer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mandelbrot_drawer.cpp" />
     <ClCompile Include="mandelbrot_drawer.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="generator.ixx" />
     <ClCompile Include="N_attractor_drawing.ixx" />
-    <ClCompile Include="N_drawer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="algorithm_concepts.ixx">
@@ -46,7 +43,7 @@
     <ClCompile Include="dfs_bandt_algorithm.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="drawing_utils.ixx">
+    <ClCompile Include="drawing.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="mandelbrot_algorithm.ixx">
@@ -67,7 +64,7 @@
     <ClCompile Include="recursive_tree_dfs_iterator.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="algorithm.ixx">
+    <ClCompile Include="algorithms.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="type_utils.ixx" />

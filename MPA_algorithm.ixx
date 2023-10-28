@@ -1,6 +1,6 @@
 module;
 #include <assert.h>
-export module frc.algorithm:attractor_MPA;
+export module frc.algorithms:attractor_MPA;
 import :base;
 import bitmap_image;
 

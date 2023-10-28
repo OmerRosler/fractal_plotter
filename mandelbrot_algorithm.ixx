@@ -1,4 +1,4 @@
-export module frc.algorithm:mandelbrot;
+export module frc.algorithms:mandelbrot;
 import std;
 import :base;
 

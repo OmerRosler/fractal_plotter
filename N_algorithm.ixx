@@ -1,4 +1,4 @@
-export module frc.algorithm:N;
+export module frc.algorithms:N;
 /* This algorithm to draw N is almost identical to Bandth algorithm to draw M
 * Chapter 9 of the paper works almost exactly with the following modifications:
 * 

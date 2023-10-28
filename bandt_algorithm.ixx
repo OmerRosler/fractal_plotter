@@ -1,7 +1,7 @@
 module;
 #include <assert.h>
 
-export module frc.algorithm:M;
+export module frc.algorithms:M;
 import std;
 
 import :bandt_base;

@@ -1,6 +1,6 @@
 export module frc.drawing:N_attractor;
 import :base;
-export import frc.algorithm;
+export import frc.algorithms;
 namespace frc
 {
 

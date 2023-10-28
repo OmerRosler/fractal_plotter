@@ -1,4 +1,4 @@
-module frc.algorithm:N_attractor_based_on_MPA;
+module frc.algorithms:N_attractor_based_on_MPA;
 import std;
 import bitmap_image;
 namespace frc

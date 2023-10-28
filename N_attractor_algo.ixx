@@ -1,4 +1,4 @@
-export module frc.algorithm:N_attractor_based_on_MPA;
+export module frc.algorithms:N_attractor_based_on_MPA;
 
 export import :attractor_MPA;
 

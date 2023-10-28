@@ -1,4 +1,4 @@
-export module frc.algorithm:bandt_base;
+export module frc.algorithms:bandt_base;
 import std;
 export import :base;
 

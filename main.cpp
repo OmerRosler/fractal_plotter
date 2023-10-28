@@ -1,4 +1,4 @@
-import frc.algorithm;
+import frc.algorithms;
 import frc.drawing;
 
 using namespace frc;

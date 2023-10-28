@@ -2,7 +2,7 @@ module;
 #include <assert.h>
 
 export module frc.drawing;
-export import frc.algorithm;
+export import frc.algorithms;
 
 export import :base;
 export import :M;

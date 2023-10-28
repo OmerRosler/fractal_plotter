@@ -1,4 +1,4 @@
-export module frc.algorithm;
+export module frc.algorithms;
 
 export import frc.utils;
 export import :base;
