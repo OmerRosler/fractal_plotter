@@ -17,20 +17,15 @@
  *                                                                           *
  *****************************************************************************
 */
+module;
+#include <stdlib.h>
+export module bitmap_image;
+//import std;
+import std.compat;
 
-#pragma once
-
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <cstring>
-#include <fstream>
-#include <iostream>
-#include <iterator>
-#include <limits>
-#include <string>
-#include <vector>
-
+//import <cmath>;
+export
+{
 class bitmap_image
 {
 public:
@@ -4995,3 +4990,4 @@ constexpr rgb_t yarg_colormap[1000] = {
    {253, 253, 253}, {253, 253, 253}, {253, 253, 253}, {253, 253, 253}, {254, 254, 254},
    {254, 254, 254}, {254, 254, 254}, {254, 254, 254}, {255, 255, 255}, {255, 255, 255}
 };
+}

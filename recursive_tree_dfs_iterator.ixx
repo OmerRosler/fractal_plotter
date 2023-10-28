@@ -1,11 +1,8 @@
-#pragma once
-
-#include <ranges>
-#include <vector>
-#include <array>
-#include <functional>
-#include <cassert>
-
+module;
+#include <assert.h>
+export module frc.utils:tree_dfs_iterator;
+import :types;
+import std;
 namespace frc
 {
 /* This type models an output operator that generates a ternary tree by
@@ -14,11 +11,11 @@ namespace frc
 	* The iteration is DFS, but there is an additional member function that skips a subtree
 	*
 	*/
-template<typename T, 
+export template<typename T, 
 	std::size_t N>
 class recursive_tree_dfs_iterator
 {
-	const unsigned max_depth;
+	const std::size_t max_depth;
 	std::pmr::vector<T> previous_values;
 	std::pmr::vector<int> previous_ids;
 public:
@@ -35,7 +32,7 @@ private:
 
 	void traverse_up_until_not_last_child()
 	{
-		//find next "avilable" index
+		//find next "available" index
 		while ((depth() != 1) && (previous_ids.back() == N -1))
 		{
 			previous_ids.pop_back();
@@ -62,7 +59,7 @@ public:
 
 	recursive_tree_dfs_iterator(generator_fns_container_t&& gens,
 		const T& start_value,
-		unsigned int max_depth,
+		std::size_t max_depth,
 		std::pmr::memory_resource* rsc) :
 		max_depth(max_depth), 
 		previous_values{rsc}, 
@@ -75,7 +72,7 @@ public:
 		this->reset(start_value, max_depth);
 	}
 	recursive_tree_dfs_iterator(generator_fns_container_t&& gens, 
-		unsigned int max_depth,
+		std::size_t max_depth,
 		std::pmr::memory_resource* rsc) : recursive_tree_dfs_iterator(std::move(gens), {}, {}, max_depth, rsc) {}
 
 	recursive_tree_dfs_iterator(const recursive_tree_dfs_iterator&) = default;
@@ -104,7 +101,7 @@ public:
 		return *this;
 	}
 	void reset(const T& start_value,
-		unsigned int max_depth) noexcept
+		std::size_t max_depth) noexcept
 	{
 		assert(this->max_depth == max_depth);
 
@@ -126,7 +123,7 @@ public:
 
 	void skip_subtree()
 	{
-		//go back up the tree until there is an avilable borther node
+		//go back up the tree until there is an available brother node
 		traverse_up_until_not_last_child();
 		// went too far, reached the end
 		if (depth() == 1)

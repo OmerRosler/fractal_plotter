@@ -19,31 +19,61 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="N_attractor_plotting.cpp" />
-    <ClCompile Include="bandt_drawer.cpp" />
+    <ClCompile Include="algorithm_base.ixx" />
+    <ClCompile Include="drawing_base.ixx" />
+    <ClCompile Include="N_attractor_algo.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mandlebrot_algorithm.cpp" />
-    <ClCompile Include="mandlebrot_drawer.cpp" />
-    <ClCompile Include="mandlebrot_drawer.hpp" />
-    <ClCompile Include="generator.hpp" />
-    <ClCompile Include="N_drawer.cpp" />
+    <ClCompile Include="mandelbrot_drawer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="generator.ixx" />
+    <ClCompile Include="N_attractor_drawing.ixx" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="algorithm_concepts.hpp" />
-    <ClInclude Include="bandt_algorithm.hpp" />
-    <ClInclude Include="bandt_drawer.hpp" />
-    <ClCompile Include="bitmap_image.hpp" />
-    <ClInclude Include="dfs_bandt_algorithm.hpp" />
-    <ClInclude Include="drawing_utils.hpp" />
-    <ClInclude Include="mandlebrot_algorithm.hpp" />
-    <ClInclude Include="MPA_algorithm.hpp" />
-    <ClInclude Include="N_algorithm.hpp" />
-    <ClInclude Include="N_attractor_plotting.hpp" />
-    <ClInclude Include="N_drawer.hpp" />
-    <ClInclude Include="recursive_tree_dfs_iterator.hpp" />
-    <ClInclude Include="run_algorithm_per_pixel.hpp" />
-    <ClInclude Include="utils.hpp" />
-    <ClInclude Include="zoom_in_tool.hpp" />
+    <ClCompile Include="algorithm_concepts.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="bandt_algorithm.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="bandt_drawer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="bitmap_image.ixx" />
+    <ClCompile Include="dfs_bandt_algorithm.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="drawing.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="mandelbrot_algorithm.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="MPA_algorithm.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="N_algorithm.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="N_attractor_algo.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="N_drawer.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="recursive_tree_dfs_iterator.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="algorithms.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="type_utils.ixx" />
+    <ClCompile Include="utils.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
+    <ClCompile Include="zoom_in_tool.ixx">
+      <FileType>Document</FileType>
+    </ClCompile>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -128,12 +158,19 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <EnableModules>false</EnableModules>
+      <EnableModules>true</EnableModules>
+      <BuildStlModules>true</BuildStlModules>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <EnableModules>true</EnableModules>
+      <BuildStlModules>true</BuildStlModules>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

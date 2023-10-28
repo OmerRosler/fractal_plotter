@@ -1,14 +1,13 @@
-#pragma once
+export module frc.algorithms:N_attractor_based_on_MPA;
 
-#include "bitmap_image.hpp"
-#include "utils.hpp"
-#include "MPA_algorithm.hpp"
+export import :attractor_MPA;
 
+import bitmap_image;
 
 namespace frc
 {
 
-struct N_attractor_algorithm : MPA_algorithm_base_t
+export struct N_attractor_algorithm : MPA_algorithm_base_t
 {
 
     r2vec_t param;
@@ -33,10 +32,10 @@ struct N_attractor_algorithm : MPA_algorithm_base_t
     *
     * The condition reduces to the formula in code
     * Note there is transitivity for `exp` (i.e. if the condition is satisfied for `m` it
-    * is also satsfied for `m-1`)
+    * is also satisfied for `m-1`)
     *
     */
-    inline bool will_not_be_in_domain(picture_domain_t& dom, r2vec_t point, unsigned int exp) const
+    inline bool will_not_be_in_domain(picture_domain_t& dom, r2vec_t point, std::size_t exp) const
     {
         return will_not_be_in_interval(dom.x, point.x, exp, param.x) ||
             will_not_be_in_interval(dom.y, point.y, exp, param.y);
@@ -50,7 +49,7 @@ private:
     static inline bool will_not_be_in_interval(
         interval_t idom,
         double point,
-        unsigned int exp,
+        std::size_t exp,
         double param)
     {
         bool cond = false;
@@ -70,10 +69,5 @@ private:
     //Used to initialize base in the constructor
     static std::vector<ifs_map_data_t> N_ifs_metadata(r2vec_t param);
 };
-
-void plot_partial_N_attractor(frc::r2vec_t param,
-    const std::string& pic_path,
-    resolution_t res,
-    unsigned int max_iterations);
 
 }

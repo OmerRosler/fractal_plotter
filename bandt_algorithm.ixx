@@ -1,15 +1,14 @@
-#pragma once
-#include <complex>
-#include <vector>
-#include <ranges>
+module;
+#include <assert.h>
 
-#include "utils.hpp"
-#include "recursive_tree_dfs_iterator.hpp"
-#include "dfs_bandt_algorithm.hpp"
+export module frc.algorithms:M;
+import std;
+
+import :bandt_base;
 
 namespace frc
 {
-class bandt_algorithm_functor : 
+export class bandt_algorithm_functor : 
 	public dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>
 {
 	using base_t = dfs_bandt_algorithm_functor<bandt_algorithm_functor, std::complex<double>, 3>;
@@ -69,7 +68,7 @@ public:
 		return 1.0 / r;
 	}
 
-	static unsigned int effective_max_iterations(const std::complex<double>& r)
+	static std::size_t effective_max_iterations(const std::complex<double>& r)
 	{
 		const auto ro = std::abs(r);
 		return std::llround(log1eps<double>() / std::log10(1.0 / ro));
@@ -86,11 +85,11 @@ public:
 	 * 
 	 * The explicit bound is Theorem 9.4 of Bandt's paper
 	*/
-	static bool translation_vector_satsifies_bound_for_outside_point(
+	static bool translation_vector_satisfies_bound_for_outside_point(
 		const std::complex<double>& r,
 		double pixel_size, 
 		const std::complex<double>& t, 
-		unsigned int depth)
+		std::size_t depth)
 	{
 		const auto ro = std::abs(r);
 		const auto ro_prime = ro + pixel_size;

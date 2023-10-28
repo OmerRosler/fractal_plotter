@@ -1,14 +1,14 @@
-#include "bandt_drawer.hpp"
-
+export module frc.drawing:M;
+export import frc.algorithms;
+import :base;
 namespace frc
 {
-
-
-color_t M_pixel_color(unsigned int max_iterations,
-    const std::complex<double>& r,
-    unsigned int escape_index)
+    
+export color_t M_pixel_color(std::size_t max_iterations,
+	const std::complex<double>& escape_value,
+    std::size_t escape_index)
 {
-    if (bandt_algorithm_functor::is_trivially_inside(r))
+    if (bandt_algorithm_functor::is_trivially_inside(escape_value))
     {
         //grey
         return{ 100, 100, 100 };
@@ -36,5 +36,19 @@ color_t M_pixel_color(unsigned int max_iterations,
         return{ 255, 255, 255 };
     }
 }
+
+/*
+*  Draws the mandelbrot set at a given resolution in a given domain
+*/
+export inline void draw_M(
+    const std::string& pic_path,
+	image_metadata_t meta,
+    std::size_t max_iterations)
+{
+    draw_fractal< bandt_algorithm_functor>
+        (pic_path, meta, max_iterations, M_pixel_color);
+}
+
+
 
 }

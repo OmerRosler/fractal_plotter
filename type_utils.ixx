@@ -1,26 +1,20 @@
-#pragma once
-#include <limits>
-#include <cmath>
-#include <filesystem>
-#include <string>
-#include <ranges>
-#include <concepts>
-#include <complex>
-#include <functional>
-#include <type_traits>
-#include <tuple>
+module;
+#include <assert.h>
+export module frc.utils:types;
 
-#include "generator.hpp"
-#include "bitmap_image.hpp"
+import <version>;
+import std;
+export import stdgen;
 
-#include "algorithm_concepts.hpp"
+export import bitmap_image;
+
 
 namespace frc
 {
 /* General tool to compare floating point types
 */
-template<std::floating_point T>
-bool almost_equal(T x, T y, int ulp = 2)
+export template<std::floating_point T>
+    bool almost_equal(T x, T y, int ulp = 2)
 {
     // the machine epsilon has to be scaled to the magnitude of the values used
     // and multiplied by the desired precision in ULPs (units in the last place)
@@ -38,8 +32,8 @@ S to_struct_impl(std::index_sequence<Is...>, Tup&& tup) {
 /*
 * Utility function to convert tuple to struct
 */
-template<class S, class Tup>
-S to_struct(Tup&& tup) {
+export template<class S, class Tup>
+    S to_struct(Tup&& tup) {
     using T = std::remove_reference_t<Tup>;
 
     return to_struct_impl<S>(
@@ -49,8 +43,8 @@ S to_struct(Tup&& tup) {
 }
 
 
-template<std::floating_point T>
-constexpr long long log1eps()
+export template<std::floating_point T>
+    constexpr long long log1eps()
 {
     return -std::numeric_limits<T>::min_exponent10;
 }
@@ -58,7 +52,7 @@ constexpr long long log1eps()
 /* An arithmetic and comparable type to represent R2 cartesian coordinates
 */
 
-struct r2vec_t
+export struct r2vec_t
 {
     double x;
     double y;
@@ -186,7 +180,7 @@ struct r2vec_t
     }
     friend r2vec_t operator-(double scalar, const r2vec_t& self)
     {
-        return (- self) + scalar;
+        return (-self) + scalar;
     }
 
     r2vec_t operator*(double scalar) const
@@ -209,13 +203,13 @@ struct r2vec_t
     }
 };
 
-struct pixel_coordinates_t
+export struct pixel_coordinates_t
 {
     unsigned int x;
     unsigned int y;
 };
 
-struct resolution_t
+export struct resolution_t
 {
     unsigned int width;
     unsigned int height;
@@ -223,7 +217,7 @@ struct resolution_t
     inline double ratio() const { return double(width) / height; }
 };
 
-struct interval_t
+export struct interval_t
 {
     double start;
     double end;
@@ -238,7 +232,7 @@ struct interval_t
 
 
 // The domain is a rectangle as BMP files are rectangles
-struct picture_domain_t
+export struct picture_domain_t
 {
     interval_t x;
     interval_t y;
@@ -265,7 +259,7 @@ struct picture_domain_t
 };
 
 //This is the metadata used to represent an image
-struct image_metadata_t
+export struct image_metadata_t
 {
     resolution_t res;
     picture_domain_t dom;
@@ -273,11 +267,12 @@ struct image_metadata_t
     //Used to convert a point in R2 to the pixel id in the image
     std::pair<int, int> pixel_id_from_value(double x, double y) const
     {
+        using id_coor_t = int;
         //TODO: Why was I adding 0.5 and 1?
         /*return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5)+1,
         std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5)+1 };*/
-        return { std::floor(res.width * (x - dom.x.start) / dom.x.length()),
-        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()))};
+        return { id_coor_t(std::floor(res.width * (x - dom.x.start) / dom.x.length())),
+        id_coor_t(std::floor(res.height * (y - dom.y.end) / (-dom.y.length()))) };
     }
 
     //Used to convert pixel id to the point in R2 it represents in the image
@@ -294,23 +289,23 @@ struct image_metadata_t
 
 //Note std::move_only_function is C++23 which is too new at the moment
 #ifdef __cpp_lib_move_only_function
-template<typename T>
-using function_holder_t = std::move_only_function<T>;
+export template<typename T>
+    using function_holder_t = std::move_only_function<T>;
 #else
 //TODO: This case does not work, probably due to `const` incorrectness of std::function
-template<typename T>
-using function_holder_t = std::function<T>;
+export template<typename T>
+    using function_holder_t = std::function<T>;
 #endif
-using color_t = ::bitmap_image::rgb_t;
+export using color_t = ::bitmap_image::rgb_t;
 
-template<typename T>
-using pixel_painter_t = color_t(*)(unsigned int, const T&, unsigned int);
+export template<typename T>
+    using pixel_painter_t = color_t(*)(std::size_t, const T&, std::size_t);
 
 /* A type that declares how much memory it requires will use it,
 *  otherwise don't pre-allocate anything
 */
-template<typename Alg>
-constexpr std::size_t caclulate_pre_allocation_buffer_size(unsigned int max_iterations)
+export template<typename Alg>
+    constexpr std::size_t caclulate_pre_allocation_buffer_size(std::size_t max_iterations)
 {
     if constexpr (
         requires {
@@ -324,4 +319,21 @@ constexpr std::size_t caclulate_pre_allocation_buffer_size(unsigned int max_iter
         return 0;
     }
 }
+
+/* The minimal amount of data the MPA algorithm requires:
+* the IFS maps and their fixed points
+*/
+export struct ifs_map_data_t
+{
+	function_holder_t<r2vec_t(r2vec_t)> map;
+	r2vec_t fixed_point;
+
+    ifs_map_data_t(function_holder_t<r2vec_t(r2vec_t)>&& fn, const r2vec_t& fp):
+        map(std::move(fn)), fixed_point(fp)
+    {
+        auto res = map(fixed_point);
+        assert(almost_equal(res.x, fixed_point.x) &&
+            almost_equal(res.y, fixed_point.y));
+    }
+};
 }

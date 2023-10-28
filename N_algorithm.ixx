@@ -1,6 +1,5 @@
-#pragma once
-
-/* This algorithm to draw N is almost identical to Bandth algorithm to draw M
+export module frc.algorithms:N;
+/* This algorithm to draw N is almost identical to Bandt algorithm to draw M
 * Chapter 9 of the paper works almost exactly with the following modifications:
 * 
 * g_i(x,y) = ((x+i)/a, (y+i)/b)
@@ -12,19 +11,15 @@
 * and the cut-off value is sqrt(2)/(1-ro) instead of 1/(1-ro)
 */
 
-#include <vector>
-#include <ranges>
-#include <cmath>
-#include <array>
-#include <functional>
+import std;
 
-#include "utils.hpp"
-#include "recursive_tree_dfs_iterator.hpp"
-#include "dfs_bandt_algorithm.hpp"
+import frc.utils;
+import :base;
+import :bandt_base;
 
 namespace frc
 {
-class N_algorithm_functor : public dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>
+export class N_algorithm_functor : public dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>
 {
 	using base_t = dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>;
 	
@@ -84,20 +79,20 @@ public:
 		return { 1.0 / r.x, 1.0 / r.y };
 	}
 
-	static bool translation_vector_satsifies_bound_for_outside_point(
+	static bool translation_vector_satisfies_bound_for_outside_point(
 		const r2vec_t& r,
 		double pixel_size,
 		const r2vec_t& t,
-		unsigned int depth)
+		std::size_t depth)
 	{
-		//TODO: Find an analouge for N
+		//TODO: Find an analogue for N
 		return false;
 	}
 
-	static unsigned int effective_max_iterations(const r2vec_t& r)
+	static std::size_t effective_max_iterations(const r2vec_t& r)
 	{
 		//TODO
-		return std::numeric_limits<unsigned int>::max();
+		return std::numeric_limits<std::size_t>::max();
 	}
 };
 

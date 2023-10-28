@@ -1,11 +1,11 @@
-#pragma once
+export module frc.algorithms:bandt_base;
+import std;
+export import :base;
 
-#include "utils.hpp"
-#include "recursive_tree_dfs_iterator.hpp"
 
 namespace frc
 {
-template<typename Derived, typename T, std::size_t N>
+export template<typename Derived, typename T, std::size_t N>
 class dfs_bandt_algorithm_functor
 {
 protected:
@@ -20,14 +20,14 @@ public:
         static_assert(bandt_like_fractal_algorithm<Derived>);
     }
 
-    static constexpr std::size_t approximate_maximal_dynamic_memory(unsigned int max_iterations)
+    static constexpr std::size_t approximate_maximal_dynamic_memory(std::size_t max_iterations)
     {
         return (sizeof(T) + sizeof(std::size_t)) * max_iterations + sizeof(T);
     }
 
-    unsigned int max_depth_of_recursive_condition(const T& r,
-        unsigned int max_iterations,
-        function_holder_t<bool(const T&, unsigned int)>&& recursive_condition)
+    std::size_t max_depth_of_recursive_condition(const T& r,
+        std::size_t max_iterations,
+        function_holder_t<bool(const T&, std::size_t)>&& recursive_condition)
     {
         Derived& self = *static_cast<Derived*>(this);
         dfs_iterator tree_iterator(Derived::generate_fns_for_tree(r),
@@ -77,7 +77,7 @@ public:
     * Here we have linear memory complexity but the algorithm is less cache friendly
     * as we iterate in DFS
     */
-	unsigned int operator()(const T& r, unsigned int max_iterations, long double pixel_size)
+    std::size_t operator()(const T& r, std::size_t max_iterations, long double pixel_size)
 	{
         Derived& self = *static_cast<Derived*>(this);
         if (self.is_trivially_inside(r))
@@ -91,22 +91,22 @@ public:
 
         const auto accumulation_algorithm_result = max_depth_of_recursive_condition(r,
             max_iterations,
-            [& r](const T& t, unsigned int) -> bool
+            [& r](const T& t, std::size_t) -> bool
         {
             return Derived::stop_iterating_value(r, t);
         });
         const auto pixel_validation_algorithm_result = 
             max_depth_of_recursive_condition(r,
             max_iterations,
-            [&r, &pixel_size](const T& t, unsigned int depth) -> bool
+            [&r, &pixel_size](const T& t, std::size_t depth) -> bool
             {
-                return Derived::translation_vector_satsifies_bound_for_outside_point(
+                return Derived::translation_vector_satisfies_bound_for_outside_point(
                     r, 
                     pixel_size, 
                     t, 
                     depth);
             });
-        // Definetly outside by 9.4
+        // Definitely outside by 9.4
         if (pixel_validation_algorithm_result != max_iterations)
         {
             // This pixel is very special, we need to investigate if this even can happen

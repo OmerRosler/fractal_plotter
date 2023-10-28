@@ -1,4 +1,3 @@
-#pragma once
 ////////////////////////////////////////////////////////////////
 // Reference implementation of std::generator proposal P2502R2.
 //
@@ -8,19 +7,13 @@
 // This now also supports yielding an arbitrary range/view as long
 // as the elements of that range are convertible to the current
 // generator's reference type.
-
-#include <algorithm>
-#include <cassert>
-#include <coroutine>
-#include <cstdint>
-#include <cstring>
-#include <exception>
-#include <memory>
-#include <new>
-#include <ranges>
-#include <type_traits>
-#include <utility>
-
+module;
+#include <assert.h>
+export module stdgen;
+#ifdef __cpp_lib_generator
+import std;
+#else
+import std.compat;
 #ifdef _MSC_VER
 #define EMPTY_BASES __declspec(empty_bases)
 #ifdef __clang__
@@ -207,17 +200,17 @@ namespace std {
     };
 
     namespace ranges {
-        template <range _Rng, class _Alloc = allocator<byte>>
+        export template <range _Rng, class _Alloc = allocator<byte>>
         struct elements_of {
             _Rng range;
             NO_UNIQUE_ADDRESS _Alloc allocator{};
         };
 
-        template <class _Rng, class _Alloc = allocator<byte>>
+        export template <class _Rng, class _Alloc = allocator<byte>>
         elements_of(_Rng&&, _Alloc = {})->elements_of<_Rng&&, _Alloc>;
     } // namespace ranges
 
-    template <class _Rty, class _Vty = void, class _Alloc = void>
+    export template <class _Rty, class _Vty = void, class _Alloc = void>
     class generator;
 
     template <class _Rty, class _Vty>
@@ -447,7 +440,7 @@ namespace std {
         }
     };
 
-    template <class _Rty, class _Vty, class _Alloc>
+    export template <class _Rty, class _Vty, class _Alloc>
     class generator {
     public:
         using _Value = _Gen_value_t<_Rty, _Vty>;
@@ -511,7 +504,8 @@ namespace std {
     };
 
     namespace ranges {
-        template <class _Rty, class _Vty, class _Alloc>
+        export template <class _Rty, class _Vty, class _Alloc>
         inline constexpr bool enable_view<generator<_Rty, _Vty, _Alloc>> = true;
     }
 } // namespace std
+#endif

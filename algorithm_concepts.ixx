@@ -1,28 +1,27 @@
-#pragma once
-#include <concepts>
-#include <array>
-#include <memory>
+export module frc.utils:concepts;
+import :types;
+import std;
 
 namespace frc
 {
 /* A concept that represents an algorithm to decide if a point is inside a fractal.
-* The call operator return type must be convertible to `unsigned int` and the value
+* The call operator return type must be convertible to `std::size_t` and the value
 * `max_iterations` represents an inside point, any other value is for outside
 * (it could be an escape index for example).
 *
 * We also require the functor to have two "easily computable" methods to decide if
-* a point is in a trivial part of the fratal or its' complement.
+* a point is in a trivial part of the fractal or its' complement.
 */
-template<typename F>
+export template<typename F>
 concept fractal_algorithm = requires {
     typename F::value_t;
-    requires std::regular_invocable<F, typename F::value_t&, unsigned int, long double>;
+    requires std::regular_invocable<F, typename F::value_t&, std::size_t, long double>;
     } &&
         requires {
             requires std::constructible_from<F, std::pmr::memory_resource*>;
             requires std::is_convertible_v<
-                std::invoke_result_t<F, typename F::value_t&, unsigned int, long double>,
-                    unsigned int>;
+                std::invoke_result_t<F, typename F::value_t&, std::size_t, long double>,
+                    std::size_t>;
     }&&
         requires(typename F::value_t r)
     {
@@ -30,25 +29,25 @@ concept fractal_algorithm = requires {
         {F::is_trivially_outside(r)} -> std::convertible_to<bool>;
     };
 
-
-template<typename T, std::size_t N>
+//TODO: Why should forward declarations be exported?
+export template<typename T, std::size_t N>
 class recursive_tree_dfs_iterator;
 
 /* A concept to represent the algorithm described in Bandt's paper for
 * determining connctedness loci of a linear IFS
 * 
-* There are (so far) two fratals that models this in this library: M and N
+* There are (so far) two fractals that models this in this library: M and N
 * 
 * The difference between them is the type of the IFS
 * 
 * The customization points of the algorithm are:
-* 1. The recursive generators of the orbit of a given candiate point
+* 1. The recursive generators of the orbit of a given candidate point
 * 2. The cut off radius for potential accumulation point
 * 3. The root of the orbit for a given candidate
 * 4. The lower bound for translation vectors
 *    needed to verify a pixel is entirely outside the fractal
 */
-template<typename F>
+export template<typename F>
 concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
     requires(const typename F::value_t & r, const typename F::value_t & t) {
     typename F::dfs_iterator;
@@ -64,13 +63,11 @@ concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
             std::convertible_to<bool>;
         {F::root(r)} -> std::convertible_to<typename F::value_t>;
 
-        {F::translation_vector_satsifies_bound_for_outside_point(r, double(), r, 0u)}  ->
+        {F::translation_vector_satisfies_bound_for_outside_point(r, double(), r, 0u)}  ->
             std::convertible_to<bool>;
 
 };
-struct ifs_map_data_t;
-struct picture_domain_t;
-struct r2vec_t;
+
 /*
 * The minimal information required for an IFS attractor plotting
 * using the Minimal Plotting algorithm:
@@ -81,19 +78,19 @@ struct r2vec_t;
 * the ability to skip points if they will never reach the frame.
 * This is encapsulated in the second concept
 */
-template<typename Alg>
+export template<typename Alg>
 concept MPA_algorithm_like = requires(Alg alg) {
     {alg.ifs} -> std::ranges::range;
     std::convertible_to<std::ranges::range_value_t<decltype(alg.ifs)>, 
         ifs_map_data_t>;
 };
 
-template<typename Alg>
+export template<typename Alg>
 concept skippable_MPA_algorithm_like = MPA_algorithm_like<Alg> &&
     requires(Alg && alg, 
     picture_domain_t & dom, 
     r2vec_t point, 
-    unsigned int num_iterations)
+    std::size_t num_iterations)
 {
     {alg.will_not_be_in_domain(dom, point, num_iterations)} -> 
         std::convertible_to<bool>;
