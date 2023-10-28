@@ -1,13 +1,12 @@
-#pragma once
-#include <format>
-
-#include "utils.hpp"
+export module frc.utils.zoom;
+import std;
+import frc.utils;
 namespace frc
 {
 /* Helper function to generate the input to a plotting function when trying to
 * zoom in around a given point in a given distance
 */
-std::tuple<resolution_t, picture_domain_t, std::string>
+export std::tuple<resolution_t, picture_domain_t, std::string>
 inline generate_domain_and_resolution(std::complex<double> pt, double radius)
 {
 	return { resolution_t{ 600, 600 },

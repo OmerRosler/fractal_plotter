@@ -1,14 +1,13 @@
-#pragma once
+export module frc.attractor.N;
 
-#include "bitmap_image.hpp"
-#include "utils.hpp"
-#include "MPA_algorithm.hpp"
-
+export import frc.MPA.attractor;
+import frc.utils;
+import bitmap_image;
 
 namespace frc
 {
 
-struct N_attractor_algorithm : MPA_algorithm_base_t
+export struct N_attractor_algorithm : MPA_algorithm_base_t
 {
 
     r2vec_t param;
@@ -71,7 +70,7 @@ private:
     static std::vector<ifs_map_data_t> N_ifs_metadata(r2vec_t param);
 };
 
-void plot_partial_N_attractor(frc::r2vec_t param,
+export void plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
     unsigned int max_iterations);

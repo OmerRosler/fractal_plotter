@@ -1,25 +1,18 @@
-#pragma once
-#include <limits>
-#include <cmath>
-#include <filesystem>
-#include <string>
-#include <ranges>
-#include <concepts>
-#include <complex>
-#include <functional>
-#include <type_traits>
-#include <tuple>
+module;
+#include <assert.h>
+#include <version>
+export module frc.utils;
+import std;
+export import stdgen;
+export import frc.concepts;
+import bitmap_image;
 
-#include "generator.hpp"
-#include "bitmap_image.hpp"
-
-#include "algorithm_concepts.hpp"
 
 namespace frc
 {
 /* General tool to compare floating point types
 */
-template<std::floating_point T>
+export template<std::floating_point T>
 bool almost_equal(T x, T y, int ulp = 2)
 {
     // the machine epsilon has to be scaled to the magnitude of the values used
@@ -38,7 +31,7 @@ S to_struct_impl(std::index_sequence<Is...>, Tup&& tup) {
 /*
 * Utility function to convert tuple to struct
 */
-template<class S, class Tup>
+export template<class S, class Tup>
 S to_struct(Tup&& tup) {
     using T = std::remove_reference_t<Tup>;
 
@@ -49,7 +42,7 @@ S to_struct(Tup&& tup) {
 }
 
 
-template<std::floating_point T>
+export template<std::floating_point T>
 constexpr long long log1eps()
 {
     return -std::numeric_limits<T>::min_exponent10;
@@ -58,7 +51,7 @@ constexpr long long log1eps()
 /* An arithmetic and comparable type to represent R2 cartesian coordinates
 */
 
-struct r2vec_t
+export struct r2vec_t
 {
     double x;
     double y;
@@ -209,13 +202,13 @@ struct r2vec_t
     }
 };
 
-struct pixel_coordinates_t
+export struct pixel_coordinates_t
 {
     unsigned int x;
     unsigned int y;
 };
 
-struct resolution_t
+export struct resolution_t
 {
     unsigned int width;
     unsigned int height;
@@ -223,7 +216,7 @@ struct resolution_t
     inline double ratio() const { return double(width) / height; }
 };
 
-struct interval_t
+export struct interval_t
 {
     double start;
     double end;
@@ -238,7 +231,7 @@ struct interval_t
 
 
 // The domain is a rectangle as BMP files are rectangles
-struct picture_domain_t
+export struct picture_domain_t
 {
     interval_t x;
     interval_t y;
@@ -265,7 +258,7 @@ struct picture_domain_t
 };
 
 //This is the metadata used to represent an image
-struct image_metadata_t
+export struct image_metadata_t
 {
     resolution_t res;
     picture_domain_t dom;
@@ -294,22 +287,22 @@ struct image_metadata_t
 
 //Note std::move_only_function is C++23 which is too new at the moment
 #ifdef __cpp_lib_move_only_function
-template<typename T>
+export template<typename T>
 using function_holder_t = std::move_only_function<T>;
 #else
 //TODO: This case does not work, probably due to `const` incorrectness of std::function
-template<typename T>
+export template<typename T>
 using function_holder_t = std::function<T>;
 #endif
-using color_t = ::bitmap_image::rgb_t;
+export using color_t = ::bitmap_image::rgb_t;
 
-template<typename T>
+export template<typename T>
 using pixel_painter_t = color_t(*)(unsigned int, const T&, unsigned int);
 
 /* A type that declares how much memory it requires will use it,
 *  otherwise don't pre-allocate anything
 */
-template<typename Alg>
+export template<typename Alg>
 constexpr std::size_t caclulate_pre_allocation_buffer_size(unsigned int max_iterations)
 {
     if constexpr (

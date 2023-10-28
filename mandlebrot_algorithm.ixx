@@ -1,17 +1,39 @@
-#pragma once
-
-#include "utils.hpp"
+export module frc.algorithm.mandlebrot;
+import std;
+import frc.utils;
 
 namespace frc
 {
+
 /* Takes a complex number c, iterates z^2+c until |z|^2>4 or max_iterations
 * It sets `c` the last iterate and returns the index in which the cutoff was passed
 *
 * If we reach `max_iterations` without the cut-off it returns `max_iterations + 1`
 */
-unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterations);
+unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterations)
+{
+    std::complex<double> next = 0;
+    std::complex<double> prev = 0;
 
-struct mandlebrot_algorithm_functor
+    for (unsigned int i = 0; i < max_iterations; i++)
+    {
+        prev = next;
+        next = prev * prev + c;
+
+        //if the norm exceeds 4 then `next` is not in the set
+        if (std::norm(next) > 4)
+        {
+            c = next;
+            return i;
+        }
+
+    }
+    return max_iterations;
+}
+
+/* The struct used by the `run_algorithm_per_pixel` functions
+*/
+export struct mandlebrot_algorithm_functor
 {
     using value_t = std::complex<double>;
     mandlebrot_algorithm_functor(std::pmr::memory_resource* rsc = nullptr) noexcept {};
@@ -33,4 +55,5 @@ struct mandlebrot_algorithm_functor
         return std::norm(r) >= 4;
     }
 };
+
 }

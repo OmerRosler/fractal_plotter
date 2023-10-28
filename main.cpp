@@ -1,8 +1,10 @@
-#include "mandlebrot_drawer.hpp"
-#include "bandt_drawer.hpp"
-#include "N_drawer.hpp"
-#include "zoom_in_tool.hpp"
-#include "N_attractor_plotting.hpp"
+import frc.attractor.N;
+import frc.algorithm.drawing.N;
+import frc.algorithm.drawing.M;
+import frc.algorithm.drawing.mandlebrot;
+import frc.utils.zoom;
+import frc.utils;
+
 using namespace frc;
 int main()
 {

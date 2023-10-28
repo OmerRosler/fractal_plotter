@@ -1,16 +1,15 @@
-#pragma once
-#include <vector>
-#include <queue>
-
-#include "utils.hpp"
-#include "bitmap_image.hpp"
+module;
+#include <assert.h>
+export module frc.MPA.attractor;
+import frc.utils;
+import bitmap_image;
 
 namespace frc
 {
 /* The minimal amount of data the MPA algorithm requires:
 * the IFS maps and their fixed points
 */
-struct ifs_map_data_t
+export struct ifs_map_data_t
 {
 	function_holder_t<r2vec_t(r2vec_t)> map;
 	r2vec_t fixed_point;
@@ -36,14 +35,14 @@ struct iterated_point
 
 /* The basic amount of information needed for the MPA algorithm
 */
-struct MPA_algorithm_base_t
+export struct MPA_algorithm_base_t
 {
     std::vector<ifs_map_data_t> ifs;
 };
 
 /* This is the main MPA algorithm. See the concepts page for the description
 */
-template<MPA_algorithm_like Algo>
+export template<MPA_algorithm_like Algo>
 void MPA_attractor_output_to_frame(
     image_metadata_t meta,
     unsigned int max_iterations,

@@ -1,11 +1,11 @@
-#pragma once
-
-#include "utils.hpp"
-#include "recursive_tree_dfs_iterator.hpp"
+export module frc.utils.bandt_algorithm_base;
+import std;
+import frc.utils;
+export import frc.tree_dfs_iterator;
 
 namespace frc
 {
-template<typename Derived, typename T, std::size_t N>
+export template<typename Derived, typename T, std::size_t N>
 class dfs_bandt_algorithm_functor
 {
 protected:

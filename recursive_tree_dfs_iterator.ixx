@@ -1,11 +1,8 @@
-#pragma once
-
-#include <ranges>
-#include <vector>
-#include <array>
-#include <functional>
-#include <cassert>
-
+module;
+#include <assert.h>
+export module frc.tree_dfs_iterator;
+import frc.utils;
+import std;
 namespace frc
 {
 /* This type models an output operator that generates a ternary tree by
@@ -14,7 +11,7 @@ namespace frc
 	* The iteration is DFS, but there is an additional member function that skips a subtree
 	*
 	*/
-template<typename T, 
+export template<typename T, 
 	std::size_t N>
 class recursive_tree_dfs_iterator
 {

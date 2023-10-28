@@ -1,18 +1,18 @@
-#pragma once
-
-#include "N_algorithm.hpp"
-#include "drawing_utils.hpp"
+export module frc.algorithm.drawing.N;
+import frc.utils;
+export import frc.algorithm.N;
+import frc.algorithm.drawing;
 namespace frc
 {
 
-color_t N_pixel_color(unsigned int max_iterations,
+export color_t N_pixel_color(unsigned int max_iterations,
 	const r2vec_t& escape_value,
 	unsigned int escape_index);
 
 /*
 *  Draws the mandlebrot set at a given resolution in a given domain
 */
-inline void draw_N(
+export inline void draw_N(
     const std::string& pic_path,
 	image_metadata_t meta,
     unsigned int max_iterations)

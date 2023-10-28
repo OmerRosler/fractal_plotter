@@ -1,5 +1,4 @@
-#pragma once
-
+export module frc.algorithm.N;
 /* This algorithm to draw N is almost identical to Bandth algorithm to draw M
 * Chapter 9 of the paper works almost exactly with the following modifications:
 * 
@@ -12,19 +11,15 @@
 * and the cut-off value is sqrt(2)/(1-ro) instead of 1/(1-ro)
 */
 
-#include <vector>
-#include <ranges>
-#include <cmath>
-#include <array>
-#include <functional>
+import std;
 
-#include "utils.hpp"
-#include "recursive_tree_dfs_iterator.hpp"
-#include "dfs_bandt_algorithm.hpp"
+import frc.utils;
+import frc.tree_dfs_iterator;
+import frc.utils.bandt_algorithm_base;
 
 namespace frc
 {
-class N_algorithm_functor : public dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>
+export class N_algorithm_functor : public dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>
 {
 	using base_t = dfs_bandt_algorithm_functor<N_algorithm_functor, r2vec_t, 3>;
 	

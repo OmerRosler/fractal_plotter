@@ -1,7 +1,6 @@
-#pragma once
-#include <memory_resource>
-
-#include "utils.hpp"
+export module frc.algorithm.generic;
+import std;
+export import frc.utils;
 namespace frc
 {
 
@@ -15,7 +14,7 @@ namespace frc
 *  - the magnitude of the value after escape
 *  - the index of escape
 */
-template<fractal_algorithm IsInFractal> 
+export template<fractal_algorithm IsInFractal> 
     requires std::same_as<typename IsInFractal::value_t, 
     std::complex<double>>
 std::generator<std::tuple<pixel_coordinates_t,
@@ -67,7 +66,7 @@ run_algorithm_per_pixel(
 *  - the magnitude of the value after escape
 *  - the index of escape
 */
-template<fractal_algorithm IsInFractal>
+export template<fractal_algorithm IsInFractal>
     requires std::same_as<typename IsInFractal::value_t,
                             r2vec_t>
 std::generator<std::tuple<pixel_coordinates_t,

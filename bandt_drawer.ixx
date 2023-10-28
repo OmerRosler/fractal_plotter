@@ -1,17 +1,18 @@
-#pragma once
-#include "bandt_algorithm.hpp"
-#include "drawing_utils.hpp"
+export module frc.algorithm.drawing.M;
+import frc.utils;
+export import frc.algorithm.bandt;
+import frc.algorithm.drawing;
 namespace frc
 {
     
-color_t M_pixel_color(unsigned int max_iterations,
+export color_t M_pixel_color(unsigned int max_iterations,
 	const std::complex<double>& escape_value,
 	unsigned int escape_index);
 
 /*
 *  Draws the mandlebrot set at a given resolution in a given domain
 */
-inline void draw_M(
+export inline void draw_M(
     const std::string& pic_path,
 	image_metadata_t meta,
     unsigned int max_iterations)

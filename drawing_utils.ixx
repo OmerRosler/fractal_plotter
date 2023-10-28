@@ -1,7 +1,11 @@
-#pragma once
+module;
+#include <assert.h>
 
-#include "bitmap_image.hpp"
-#include "run_algorithm_per_pixel.hpp"
+export module frc.algorithm.drawing;
+import bitmap_image;
+
+
+import frc.algorithm.generic;
 
 namespace frc
 {
@@ -17,7 +21,7 @@ namespace frc
 * The painter function is NOT part of the fractal algorithm and therefore decoupled from
 * the algorithm class
 */
-template<fractal_algorithm IsInFractal>
+export template<fractal_algorithm IsInFractal>
 void draw_fractal(
     const std::string& pic_path,
     image_metadata_t meta,

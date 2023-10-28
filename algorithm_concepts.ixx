@@ -1,7 +1,5 @@
-#pragma once
-#include <concepts>
-#include <array>
-#include <memory>
+export module frc.concepts;
+import std;
 
 namespace frc
 {
@@ -13,7 +11,7 @@ namespace frc
 * We also require the functor to have two "easily computable" methods to decide if
 * a point is in a trivial part of the fratal or its' complement.
 */
-template<typename F>
+export template<typename F>
 concept fractal_algorithm = requires {
     typename F::value_t;
     requires std::regular_invocable<F, typename F::value_t&, unsigned int, long double>;
@@ -30,8 +28,8 @@ concept fractal_algorithm = requires {
         {F::is_trivially_outside(r)} -> std::convertible_to<bool>;
     };
 
-
-template<typename T, std::size_t N>
+//TODO: Why should forward declarations be exported?
+export template<typename T, std::size_t N>
 class recursive_tree_dfs_iterator;
 
 /* A concept to represent the algorithm described in Bandt's paper for
@@ -48,7 +46,7 @@ class recursive_tree_dfs_iterator;
 * 4. The lower bound for translation vectors
 *    needed to verify a pixel is entirely outside the fractal
 */
-template<typename F>
+export template<typename F>
 concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
     requires(const typename F::value_t & r, const typename F::value_t & t) {
     typename F::dfs_iterator;
@@ -68,9 +66,9 @@ concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
             std::convertible_to<bool>;
 
 };
-struct ifs_map_data_t;
-struct picture_domain_t;
-struct r2vec_t;
+export struct ifs_map_data_t;
+export struct picture_domain_t;
+export struct r2vec_t;
 /*
 * The minimal information required for an IFS attractor plotting
 * using the Minimal Plotting algorithm:
@@ -81,14 +79,14 @@ struct r2vec_t;
 * the ability to skip points if they will never reach the frame.
 * This is encapsulated in the second concept
 */
-template<typename Alg>
+export template<typename Alg>
 concept MPA_algorithm_like = requires(Alg alg) {
     {alg.ifs} -> std::ranges::range;
     std::convertible_to<std::ranges::range_value_t<decltype(alg.ifs)>, 
         ifs_map_data_t>;
 };
 
-template<typename Alg>
+export template<typename Alg>
 concept skippable_MPA_algorithm_like = MPA_algorithm_like<Alg> &&
     requires(Alg && alg, 
     picture_domain_t & dom, 

@@ -15,19 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="generator.hpp">
+    <ClCompile Include="generator.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mandlebrot_drawer.hpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="mandlebrot_drawer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mandlebrot_algorithm.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bandt_drawer.cpp">
@@ -36,55 +30,56 @@
     <ClCompile Include="N_drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="bitmap_image.hpp">
+    <ClCompile Include="bitmap_image.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="N_attractor_plotting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="utils.hpp">
+    <ClCompile Include="N_attractor_plotting.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bandt_algorithm.hpp">
+    </ClCompile>
+    <ClCompile Include="MPA_algorithm.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="run_algorithm_per_pixel.hpp">
+    </ClCompile>
+    <ClCompile Include="utils.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mandlebrot_algorithm.hpp">
+    </ClCompile>
+    <ClCompile Include="run_algorithm_per_pixel.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="bandt_drawer.hpp">
+    </ClCompile>
+    <ClCompile Include="drawing_utils.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="zoom_in_tool.hpp">
+    </ClCompile>
+    <ClCompile Include="algorithm_concepts.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="N_algorithm.hpp">
+    </ClCompile>
+    <ClCompile Include="recursive_tree_dfs_iterator.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="N_drawer.hpp">
+    </ClCompile>
+    <ClCompile Include="mandlebrot_algorithm.ixx">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dfs_bandt_algorithm.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="recursive_tree_dfs_iterator.hpp">
+    </ClCompile>
+    <ClCompile Include="N_algorithm.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dfs_bandt_algorithm.hpp">
+    </ClCompile>
+    <ClCompile Include="N_drawer.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="algorithm_concepts.hpp">
+    </ClCompile>
+    <ClCompile Include="bandt_algorithm.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="drawing_utils.hpp">
+    </ClCompile>
+    <ClCompile Include="bandt_drawer.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MPA_algorithm.hpp">
+    </ClCompile>
+    <ClCompile Include="mandlebrot_drawer.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="N_attractor_plotting.hpp">
+    </ClCompile>
+    <ClCompile Include="zoom_in_tool.ixx">
       <Filter>Header Files</Filter>
-    </ClInclude>
+    </ClCompile>
   </ItemGroup>
 </Project>

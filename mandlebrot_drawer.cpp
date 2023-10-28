@@ -1,5 +1,5 @@
-#include "mandlebrot_drawer.hpp"
-
+import frc.algorithm.drawing.mandlebrot;
+import frc.utils;
 namespace frc
 {
 
