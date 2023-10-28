@@ -1,4 +1,4 @@
-export module frc.algorithm.generic;
+export module frc.algorithm:base;
 import std;
 export import frc.utils;
 namespace frc

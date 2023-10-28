@@ -1,7 +1,6 @@
-export module frc.algorithm.drawing.M;
-import frc.utils;
-export import frc.algorithm.bandt;
-import frc.algorithm.drawing;
+export module frc.drawing:M;
+export import frc.algorithm;
+import :base;
 namespace frc
 {
     
@@ -10,7 +9,7 @@ export color_t M_pixel_color(unsigned int max_iterations,
 	unsigned int escape_index);
 
 /*
-*  Draws the mandlebrot set at a given resolution in a given domain
+*  Draws the mandelbrot set at a given resolution in a given domain
 */
 export inline void draw_M(
     const std::string& pic_path,

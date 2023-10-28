@@ -1,7 +1,7 @@
-export module frc.utils.bandt_algorithm_base;
+export module frc.algorithm:bandt_base;
 import std;
-import frc.utils;
-export import frc.tree_dfs_iterator;
+export import :base;
+
 
 namespace frc
 {

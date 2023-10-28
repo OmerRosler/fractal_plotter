@@ -1,11 +1,10 @@
 module;
 #include <assert.h>
 
-export module frc.algorithm.bandt;
+export module frc.algorithm:M;
 import std;
 
-import frc.utils;
-import frc.utils.bandt_algorithm_base;
+import :bandt_base;
 
 namespace frc
 {

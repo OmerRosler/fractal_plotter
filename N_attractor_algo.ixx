@@ -1,7 +1,7 @@
-export module frc.attractor.N;
+export module frc.algorithm:N_attractor_based_on_MPA;
 
-export import frc.MPA.attractor;
-import frc.utils;
+export import :attractor_MPA;
+
 import bitmap_image;
 
 namespace frc
@@ -69,10 +69,5 @@ private:
     //Used to initialize base in the constructor
     static std::vector<ifs_map_data_t> N_ifs_metadata(r2vec_t param);
 };
-
-export void plot_partial_N_attractor(frc::r2vec_t param,
-    const std::string& pic_path,
-    resolution_t res,
-    unsigned int max_iterations);
 
 }

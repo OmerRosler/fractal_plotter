@@ -19,14 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="N_attractor_plotting.cpp" />
+    <ClCompile Include="algorithm_base.ixx" />
+    <ClCompile Include="drawing_base.ixx" />
+    <ClCompile Include="N_attractor_algo.cpp" />
     <ClCompile Include="bandt_drawer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="mandlebrot_drawer.cpp" />
-    <ClCompile Include="mandlebrot_drawer.ixx">
+    <ClCompile Include="mandelbrot_drawer.cpp" />
+    <ClCompile Include="mandelbrot_drawer.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="generator.ixx" />
+    <ClCompile Include="N_attractor_drawing.ixx" />
     <ClCompile Include="N_drawer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -46,7 +49,7 @@
     <ClCompile Include="drawing_utils.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="mandlebrot_algorithm.ixx">
+    <ClCompile Include="mandelbrot_algorithm.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="MPA_algorithm.ixx">
@@ -55,7 +58,7 @@
     <ClCompile Include="N_algorithm.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="N_attractor_plotting.ixx">
+    <ClCompile Include="N_attractor_algo.ixx">
       <FileType>Document</FileType>
     </ClCompile>
     <ClCompile Include="N_drawer.ixx">
@@ -64,9 +67,10 @@
     <ClCompile Include="recursive_tree_dfs_iterator.ixx">
       <FileType>Document</FileType>
     </ClCompile>
-    <ClCompile Include="run_algorithm_per_pixel.ixx">
+    <ClCompile Include="algorithm.ixx">
       <FileType>Document</FileType>
     </ClCompile>
+    <ClCompile Include="type_utils.ixx" />
     <ClCompile Include="utils.ixx">
       <FileType>Document</FileType>
     </ClCompile>

@@ -1,43 +1,23 @@
-import frc.attractor.N;
-import std;
-import bitmap_image;
+export module frc.drawing:N_attractor;
+import :base;
+export import frc.algorithm;
 namespace frc
 {
 
-auto N_attractor_algorithm::N_ifs_metadata(frc::r2vec_t param) -> std::vector<frc::ifs_map_data_t>
-{
-    auto fplus = [param](frc::r2vec_t pt)
-    {
-        return (pt + 1.0) * param;
-    };
-    auto fminus = [param](frc::r2vec_t pt)
-    {
-        return (pt - 1.0) * param;
-    };
-
-    const frc::r2vec_t fplus_fixed_point = param / (1.0 - param);
-    const frc::r2vec_t fminus_fixed_point = -param / (1.0 - param);
-
-    std::vector<frc::ifs_map_data_t> ifs;
-    ifs.emplace_back(fplus, fplus_fixed_point);
-    ifs.emplace_back(fminus, fminus_fixed_point);
-    return ifs;
-}
-
-void plot_partial_N_attractor(frc::r2vec_t param, 
+export void plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
     unsigned int max_iterations)
 {
 
     auto N_ifs_abs_bound = [](double x)
-    {
-        return x / (1.0 - x);
-    };
+        {
+            return x / (1.0 - x);
+        };
     auto x_bound = N_ifs_abs_bound(param.x);
     auto y_bound = N_ifs_abs_bound(param.y);
-    auto bound = std::max(x_bound,y_bound);
-    
+    auto bound = std::max(x_bound, y_bound);
+
     //This is some subset of the attractor to zoom in to
     image_metadata_t meta = { res,
             frc::picture_domain_t{.x{-bound / 10, bound / 10}, .y{-bound / 10,bound / 10} }
@@ -53,7 +33,7 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     MPA_attractor_output_to_frame(meta, max_iterations, algo, frame);
 
     //plot it
-    bitmap_image fractal_jet(meta.res.width, meta.res.height);    
+    bitmap_image fractal_jet(meta.res.width, meta.res.height);
 
     //set all pixels to white
     fractal_jet.clear(255);
@@ -72,6 +52,7 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     //save the image
     fractal_jet.save_image(pic_path);
 
-    
+
 }
-}
+
+};

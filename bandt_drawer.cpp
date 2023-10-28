@@ -1,5 +1,5 @@
-import frc.algorithm.drawing.M;
-import frc.utils;
+module frc.drawing:M;
+
 namespace frc
 {
 

@@ -1,6 +1,6 @@
-export module frc.algorithm.mandlebrot;
+export module frc.algorithm:mandelbrot;
 import std;
-import frc.utils;
+import :base;
 
 namespace frc
 {
@@ -10,7 +10,7 @@ namespace frc
 *
 * If we reach `max_iterations` without the cut-off it returns `max_iterations + 1`
 */
-unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterations)
+unsigned int iterate_mandelbrot(std::complex<double>& c, unsigned int max_iterations)
 {
     std::complex<double> next = 0;
     std::complex<double> prev = 0;
@@ -33,16 +33,16 @@ unsigned int iterate_mandlebrot(std::complex<double>& c, unsigned int max_iterat
 
 /* The struct used by the `run_algorithm_per_pixel` functions
 */
-export struct mandlebrot_algorithm_functor
+export struct mandelbrot_algorithm_functor
 {
     using value_t = std::complex<double>;
-    mandlebrot_algorithm_functor(std::pmr::memory_resource* rsc = nullptr) noexcept {};
+    mandelbrot_algorithm_functor(std::pmr::memory_resource* rsc = nullptr) noexcept {};
 
     unsigned int operator()(std::complex<double>& c, 
         unsigned int max_iterations, 
         long double pixel_size) const
     {
-        return iterate_mandlebrot(c, max_iterations);
+        return iterate_mandelbrot(c, max_iterations);
     }
 
     static bool is_trivially_inside(std::complex<double> r)

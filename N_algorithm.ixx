@@ -1,4 +1,4 @@
-export module frc.algorithm.N;
+export module frc.algorithm:N;
 /* This algorithm to draw N is almost identical to Bandth algorithm to draw M
 * Chapter 9 of the paper works almost exactly with the following modifications:
 * 
@@ -14,8 +14,8 @@ export module frc.algorithm.N;
 import std;
 
 import frc.utils;
-import frc.tree_dfs_iterator;
-import frc.utils.bandt_algorithm_base;
+import :base;
+import :bandt_base;
 
 namespace frc
 {

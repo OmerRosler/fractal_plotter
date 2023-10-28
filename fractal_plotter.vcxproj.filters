@@ -21,7 +21,7 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="mandlebrot_drawer.cpp">
+    <ClCompile Include="mandelbrot_drawer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="bandt_drawer.cpp">
@@ -33,10 +33,10 @@
     <ClCompile Include="bitmap_image.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="N_attractor_plotting.cpp">
+    <ClCompile Include="N_attractor_algo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="N_attractor_plotting.ixx">
+    <ClCompile Include="N_attractor_algo.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="MPA_algorithm.ixx">
@@ -45,7 +45,7 @@
     <ClCompile Include="utils.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="run_algorithm_per_pixel.ixx">
+    <ClCompile Include="algorithm.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="drawing_utils.ixx">
@@ -57,7 +57,7 @@
     <ClCompile Include="recursive_tree_dfs_iterator.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="mandlebrot_algorithm.ixx">
+    <ClCompile Include="mandelbrot_algorithm.ixx">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="dfs_bandt_algorithm.ixx">
@@ -75,10 +75,22 @@
     <ClCompile Include="bandt_drawer.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="mandlebrot_drawer.ixx">
+    <ClCompile Include="mandelbrot_drawer.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="zoom_in_tool.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="type_utils.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="drawing_base.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithm_base.ixx">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="N_attractor_drawing.ixx">
       <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1,6 +1,6 @@
-export module frc.utils.zoom;
+export module frc.utils:zoom;
 import std;
-import frc.utils;
+import :types;
 namespace frc
 {
 /* Helper function to generate the input to a plotting function when trying to

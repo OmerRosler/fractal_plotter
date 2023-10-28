@@ -1,4 +1,5 @@
-export module frc.concepts;
+export module frc.utils:concepts;
+import :types;
 import std;
 
 namespace frc
@@ -66,9 +67,7 @@ concept bandt_like_fractal_algorithm = fractal_algorithm<F> &&
             std::convertible_to<bool>;
 
 };
-export struct ifs_map_data_t;
-export struct picture_domain_t;
-export struct r2vec_t;
+
 /*
 * The minimal information required for an IFS attractor plotting
 * using the Minimal Plotting algorithm:

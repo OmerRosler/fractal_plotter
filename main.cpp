@@ -1,15 +1,11 @@
-import frc.attractor.N;
-import frc.algorithm.drawing.N;
-import frc.algorithm.drawing.M;
-import frc.algorithm.drawing.mandlebrot;
-import frc.utils.zoom;
-import frc.utils;
+import frc.algorithm;
+import frc.drawing;
 
 using namespace frc;
 int main()
 {
     //auto [q_res, q_dom, q_pic_name] = generate_domain_and_resolution(std::complex(0.0, 0.0), 2);
-    //draw_mandlebrot(std::format("pics/mandlebrot_{}_depth_{}.bmp", q_pic_name, 100),
+    //draw_mandelbrot(std::format("pics/mandelbrot_{}_depth_{}.bmp", q_pic_name, 100),
     //    {q_res, q_dom}, 100);
 
     //auto [m_res, m_dom, m_pic_name] = 
@@ -17,7 +13,7 @@ int main()
     //draw_M(std::format("pics/bandt_{}_depth_{}.bmp", m_pic_name, 20),
     //    {m_res, m_dom}, 20);
 
-    //draw_mandlebrot("pics/mandlebrot_debug.bmp",
+    //draw_mandelbrot("pics/mandelbrot_debug.bmp",
     //    {resolution_t{ 600, 600 },
     //    picture_domain_t{ .x{-1, 1}, .y{-1, 1 } }},
     //    100);

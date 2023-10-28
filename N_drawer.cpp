@@ -1,5 +1,4 @@
-import frc.algorithm.drawing.N;
-import frc.utils;
+module frc.drawing:N;
 namespace frc
 {
 color_t N_pixel_color(unsigned int max_iterations,

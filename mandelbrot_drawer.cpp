@@ -1,13 +1,12 @@
-import frc.algorithm.drawing.mandlebrot;
-import frc.utils;
+module frc.algorithm:mandelbrot;
 namespace frc
 {
 
-color_t mandlebrot_pixel_color(unsigned int max_iterations,
+color_t mandelbrot_pixel_color(unsigned int max_iterations,
     const std::complex<double>& escape_value,
     unsigned int escape_index)
 {
-    // The pixel did NOT escape and is inside the Mandlebrot set
+    // The pixel did NOT escape and is inside the Mandelbrot set
     if (escape_index == max_iterations)
     {
         //black

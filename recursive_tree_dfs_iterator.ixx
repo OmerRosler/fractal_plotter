@@ -1,7 +1,7 @@
 module;
 #include <assert.h>
-export module frc.tree_dfs_iterator;
-import frc.utils;
+export module frc.utils:tree_dfs_iterator;
+import :types;
 import std;
 namespace frc
 {
