@@ -20,6 +20,9 @@
 #include <ranges>
 #include <type_traits>
 #include <utility>
+#ifdef __cpp_lib_generator
+#include <generator>
+#else
 
 #ifdef _MSC_VER
 #define EMPTY_BASES __declspec(empty_bases)
@@ -515,3 +518,4 @@ namespace std {
         inline constexpr bool enable_view<generator<_Rty, _Vty, _Alloc>> = true;
     }
 } // namespace std
+#endif
