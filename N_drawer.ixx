@@ -4,9 +4,9 @@ export import frc.algorithms;
 namespace frc
 {
 
-export color_t N_pixel_color(unsigned int max_iterations,
+export color_t N_pixel_color(std::size_t max_iterations,
 	const r2vec_t& escape_value,
-	unsigned int escape_index)
+    std::size_t escape_index)
 {
     if (N_algorithm_functor::is_trivially_outside(escape_value))
     {
@@ -37,7 +37,7 @@ export color_t N_pixel_color(unsigned int max_iterations,
 export inline void draw_N(
     const std::string& pic_path,
 	image_metadata_t meta,
-    unsigned int max_iterations)
+    std::size_t max_iterations)
 {
     draw_fractal< N_algorithm_functor>
         (pic_path, meta, max_iterations, N_pixel_color);

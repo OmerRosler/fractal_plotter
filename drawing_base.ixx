@@ -25,7 +25,7 @@ namespace frc
         void draw_fractal(
             const std::string& pic_path,
             image_metadata_t meta,
-            unsigned int max_iterations,
+            std::size_t max_iterations,
             pixel_painter_t<typename IsInFractal::value_t> paint_fn)
     {
         assert(meta.dom.is_resolution_for_domain(meta.res));

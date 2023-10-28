@@ -7,7 +7,7 @@ namespace frc
 export void plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
-    unsigned int max_iterations)
+    std::size_t max_iterations)
 {
 
     auto N_ifs_abs_bound = [](double x)
@@ -39,9 +39,9 @@ export void plot_partial_N_attractor(frc::r2vec_t param,
     fractal_jet.clear(255);
 
     //Fill picture from frame
-    for (int i = 0; i < meta.res.height; ++i)
+    for (auto i = 0u; i < meta.res.height; ++i)
     {
-        for (int j = 0; j < meta.res.width; ++j)
+        for (auto j = 0u; j < meta.res.width; ++j)
         {
             if (frame[i][j] != 0)
             {

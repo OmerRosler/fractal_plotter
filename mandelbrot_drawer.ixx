@@ -4,9 +4,9 @@ import frc.algorithms;
 namespace frc
 {
 
-export color_t mandelbrot_pixel_color(unsigned int max_iterations,
+export color_t mandelbrot_pixel_color(std::size_t max_iterations,
     const std::complex<double>& escape_value,
-    unsigned int escape_index)
+    std::size_t escape_index)
 {
     // The pixel did NOT escape and is inside the Mandelbrot set
     if (escape_index == max_iterations)
@@ -16,7 +16,7 @@ export color_t mandelbrot_pixel_color(unsigned int max_iterations,
     }
 
     // Color formula taken from the bitmap library examples, don't know how it works
-    auto index = static_cast<unsigned int>
+    auto index = static_cast<std::size_t>
         (1000.0 * std::log2(1.75 + escape_index -
             std::log2(std::log2(std::abs(escape_value)))) / std::log2(max_iterations));
 
@@ -30,7 +30,7 @@ export color_t mandelbrot_pixel_color(unsigned int max_iterations,
 export inline void draw_mandelbrot(
     const std::string& pic_path,
     image_metadata_t meta,
-    unsigned int max_iterations)
+    std::size_t max_iterations)
 {
     draw_fractal< mandelbrot_algorithm_functor>
         (pic_path, meta, max_iterations, mandelbrot_pixel_color);

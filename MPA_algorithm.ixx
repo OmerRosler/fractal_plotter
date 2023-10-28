@@ -13,7 +13,7 @@ namespace frc
 struct iterated_point
 {
     r2vec_t point;
-    unsigned int num_of_iterations = 0u;
+    std::size_t num_of_iterations = 0u;
 };
 
 /* The basic amount of information needed for the MPA algorithm
@@ -28,7 +28,7 @@ export struct MPA_algorithm_base_t
 export template<MPA_algorithm_like Algo>
 void MPA_attractor_output_to_frame(
     image_metadata_t meta,
-    unsigned int max_iterations,
+    std::size_t max_iterations,
     Algo&& algorithm,
     std::vector<std::vector<int>>& out_frame)
     //TODO: Output the algorithm result to an `std::mdspan` type for the frame once available
@@ -37,7 +37,7 @@ void MPA_attractor_output_to_frame(
     assert(meta.dom.is_resolution_for_domain(meta.res));
 
     std::queue<iterated_point> inside_pixels;
-    //Fill the queue with the fixed points of the maps (which are definetly in the attractor)
+    //Fill the queue with the fixed points of the maps (which are definitely in the attractor)
     for (auto&& [_, fp] : algorithm.ifs)
     {
         inside_pixels.push({ fp });

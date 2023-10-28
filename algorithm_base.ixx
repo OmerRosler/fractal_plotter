@@ -21,12 +21,12 @@ std::generator<std::tuple<pixel_coordinates_t,
     std::complex<double>,
     std::invoke_result_t<IsInFractal, 
         std::complex<double>&, 
-        unsigned int,
+        std::size_t,
         long double>
     >>
 run_algorithm_per_pixel(
     image_metadata_t meta,
-    unsigned int max_iterations)
+    std::size_t max_iterations)
 {
     const auto pixel_size_bound = meta.dom.min_bounding_radius_for_pixel(meta.res);
 
@@ -71,10 +71,10 @@ export template<fractal_algorithm IsInFractal>
                             r2vec_t>
 std::generator<std::tuple<pixel_coordinates_t,
     r2vec_t,
-    std::invoke_result_t<IsInFractal, r2vec_t&, unsigned int, long double>>>
+    std::invoke_result_t<IsInFractal, r2vec_t&, std::size_t, long double>>>
     run_algorithm_per_pixel(
         image_metadata_t meta,
-        unsigned int max_iterations)
+        std::size_t max_iterations)
 {
     const auto pixel_size_bound = meta.dom.min_bounding_radius_for_pixel(meta.res);
     

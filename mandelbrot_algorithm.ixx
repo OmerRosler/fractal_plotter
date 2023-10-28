@@ -10,12 +10,12 @@ namespace frc
 *
 * If we reach `max_iterations` without the cut-off it returns `max_iterations + 1`
 */
-unsigned int iterate_mandelbrot(std::complex<double>& c, unsigned int max_iterations)
+std::size_t iterate_mandelbrot(std::complex<double>& c, std::size_t max_iterations)
 {
     std::complex<double> next = 0;
     std::complex<double> prev = 0;
 
-    for (unsigned int i = 0; i < max_iterations; i++)
+    for (std::size_t i = 0; i < max_iterations; i++)
     {
         prev = next;
         next = prev * prev + c;
@@ -38,8 +38,8 @@ export struct mandelbrot_algorithm_functor
     using value_t = std::complex<double>;
     mandelbrot_algorithm_functor(std::pmr::memory_resource* rsc = nullptr) noexcept {};
 
-    unsigned int operator()(std::complex<double>& c, 
-        unsigned int max_iterations, 
+    std::size_t operator()(std::complex<double>& c,
+        std::size_t max_iterations,
         long double pixel_size) const
     {
         return iterate_mandelbrot(c, max_iterations);

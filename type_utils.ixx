@@ -267,11 +267,12 @@ export struct image_metadata_t
     //Used to convert a point in R2 to the pixel id in the image
     std::pair<int, int> pixel_id_from_value(double x, double y) const
     {
+        using id_coor_t = int;
         //TODO: Why was I adding 0.5 and 1?
         /*return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5)+1,
         std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5)+1 };*/
-        return { std::floor(res.width * (x - dom.x.start) / dom.x.length()),
-        std::floor(res.height * (y - dom.y.end) / (-dom.y.length())) };
+        return { id_coor_t(std::floor(res.width * (x - dom.x.start) / dom.x.length())),
+        id_coor_t(std::floor(res.height * (y - dom.y.end) / (-dom.y.length()))) };
     }
 
     //Used to convert pixel id to the point in R2 it represents in the image
@@ -298,13 +299,13 @@ export template<typename T>
 export using color_t = ::bitmap_image::rgb_t;
 
 export template<typename T>
-    using pixel_painter_t = color_t(*)(unsigned int, const T&, unsigned int);
+    using pixel_painter_t = color_t(*)(std::size_t, const T&, std::size_t);
 
 /* A type that declares how much memory it requires will use it,
 *  otherwise don't pre-allocate anything
 */
 export template<typename Alg>
-    constexpr std::size_t caclulate_pre_allocation_buffer_size(unsigned int max_iterations)
+    constexpr std::size_t caclulate_pre_allocation_buffer_size(std::size_t max_iterations)
 {
     if constexpr (
         requires {

@@ -4,9 +4,9 @@ import :base;
 namespace frc
 {
     
-export color_t M_pixel_color(unsigned int max_iterations,
+export color_t M_pixel_color(std::size_t max_iterations,
 	const std::complex<double>& escape_value,
-	unsigned int escape_index) 
+    std::size_t escape_index)
 {
     if (bandt_algorithm_functor::is_trivially_inside(escape_value))
     {
@@ -43,7 +43,7 @@ export color_t M_pixel_color(unsigned int max_iterations,
 export inline void draw_M(
     const std::string& pic_path,
 	image_metadata_t meta,
-    unsigned int max_iterations)
+    std::size_t max_iterations)
 {
     draw_fractal< bandt_algorithm_functor>
         (pic_path, meta, max_iterations, M_pixel_color);
