@@ -74,6 +74,13 @@ void MPA_attractor_output_to_frame(
             out_frame[coords.first][coords.second] = 1;
         }
 
+        // Early breakout if needed
+        if (num_iterations == max_iterations)
+        {
+            inside_pixels.pop();
+            continue;
+        }
+
         //If skipping is available, use it with the domain given
         if constexpr (skippable_MPA_algorithm_like<Algo>)
         {
@@ -83,6 +90,13 @@ void MPA_attractor_output_to_frame(
                 point, 
                 max_iterations - num_iterations))
             {
+#ifndef NDEBUG
+                for (auto&& [ifs_map, _] : algorithm.ifs)
+                {
+                    auto new_pt = ifs_map(point);
+                    assert(!meta.dom.is_in_range(new_pt), "Bad condition");
+                }
+#endif
                 inside_pixels.pop();
                 continue;
             }
@@ -91,11 +105,6 @@ void MPA_attractor_output_to_frame(
         //Apply all maps to the point and add them to the queue
         for (auto&& [ifs_map, _] : algorithm.ifs)
         {
-            // Early breakout if needed
-            if (num_iterations == max_iterations)
-            {
-                break;
-            }
             auto new_point = ifs_map(point);
 
             inside_pixels.emplace(new_point, num_iterations + 1);

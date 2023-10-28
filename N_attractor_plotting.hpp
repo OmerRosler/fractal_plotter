@@ -58,11 +58,11 @@ private:
         auto pm = std::pow(param, exp);
         if (point < idom.start)
         {
-            cond = ((idom.start - pm * point) > (2 * (1 - pm) / (1 - param)));
+            cond = ((idom.start - pm * point) > ((1 - pm) / (1 - param)));
         }
         else if (point > idom.end)
         {
-            cond = (std::abs(pm * point - idom.end) > (2 * (1 - pm) / (1 - param)));
+            cond = (std::abs(pm * point - idom.end) > ((1 - pm) / (1 - param)));
         }
         return cond;
     }
