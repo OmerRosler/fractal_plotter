@@ -256,6 +256,20 @@ export struct picture_domain_t
         return std::max(x.length() / res.width,
             y.length() / res.height) / std::sqrt(2);
     }
+
+    static picture_domain_t make_from_pt_and_radii(std::complex<double> pt,
+        double xradius,
+        double yradius)
+    {
+        return picture_domain_t{ .x{pt.real(), pt.real() + xradius},
+            .y{pt.imag() - yradius, pt.imag() } };
+    }
+
+    static picture_domain_t make_from_pt_and_radius(std::complex<double> pt,
+        double radius)
+    {
+        return make_from_pt_and_radii(pt, radius, radius);
+    }
 };
 
 //This is the metadata used to represent an image
@@ -282,6 +296,20 @@ export struct image_metadata_t
             ((dom.x.length() * (px + 0.5)) / res.width + dom.x.start),
             (-dom.y.length() * (py - 0.5) / res.height + dom.y.end)
         };
+    }
+
+    // Zoom in around certain coordinates. Note `y` coordinate is inverted to match MS paint
+    image_metadata_t& zoom_in(int xcoord =0, int ycoord = 0, int zoom_factor=1)
+    {
+        const auto x_start = dom.x.start + dom.x.length() * double(xcoord) / res.width;
+        const auto y_start = dom.y.end - dom.y.length() * double(ycoord) / res.height;
+        const auto x_length = dom.x.length() / zoom_factor;
+        const auto y_length = dom.y.length() / zoom_factor;
+        dom = picture_domain_t::make_from_pt_and_radii(
+            std::complex{ x_start,y_start }, 
+            x_length, 
+            y_length);
+        return *this;
     }
 
 };
