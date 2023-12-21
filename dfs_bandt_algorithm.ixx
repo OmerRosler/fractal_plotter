@@ -95,27 +95,27 @@ public:
         {
             return Derived::stop_iterating_value(r, t);
         });
-        const auto pixel_validation_algorithm_result = 
-            max_depth_of_recursive_condition(r,
-            max_iterations,
-            [&r, &pixel_size](const T& t, std::size_t depth) -> bool
-            {
-                return Derived::translation_vector_satisfies_bound_for_outside_point(
-                    r, 
-                    pixel_size, 
-                    t, 
-                    depth);
-            });
-        // Definitely outside by 9.4
-        if (pixel_validation_algorithm_result != max_iterations)
-        {
-            // This pixel is very special, we need to investigate if this even can happen
-            if (accumulation_algorithm_result == max_iterations)
-            {
-                return max_iterations + 1;
-            }
-            return 0;
-        }
+        //const auto pixel_validation_algorithm_result = 
+        //    max_depth_of_recursive_condition(r,
+        //    max_iterations,
+        //    [&r, &pixel_size](const T& t, std::size_t depth) -> bool
+        //    {
+        //        return Derived::translation_vector_satisfies_bound_for_outside_point(
+        //            r, 
+        //            pixel_size, 
+        //            t, 
+        //            depth);
+        //    });
+        //// Definitely outside by 9.4
+        //if (pixel_validation_algorithm_result != max_iterations)
+        //{
+        //    // This pixel is very special, we need to investigate if this even can happen
+        //    if (accumulation_algorithm_result == max_iterations)
+        //    {
+        //        return max_iterations + 1;
+        //    }
+        //    return 0;
+        //}
         
         // The accumulation algorithm decides if the point is inside or out
         return accumulation_algorithm_result;
