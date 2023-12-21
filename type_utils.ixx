@@ -241,7 +241,8 @@ export struct picture_domain_t
 
     inline bool is_resolution_for_domain(resolution_t res) const
     {
-        return almost_equal(res.ratio(), x.length() / y.length());
+        return std::fabs(res.ratio() - x.length() / y.length()) < res.height * res.width;
+        //return almost_equal(res.ratio(), x.length() / y.length());
     }
     inline bool is_in_range(const r2vec_t& vec) const
     {
