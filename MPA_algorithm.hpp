@@ -41,6 +41,35 @@ struct MPA_algorithm_base_t
     std::vector<ifs_map_data_t> ifs;
 };
 
+struct cylinder_set_t
+{
+    using letter_t = decltype(MPA_algorithm_base_t::ifs)::const_iterator;
+    using word_t = std::vector<letter_t>;
+    word_t word;
+
+    cylinder_set_t() = default;
+    cylinder_set_t(const word_t& word) : word(word) {}
+    cylinder_set_t(word_t&& word) : word(std::move(word)) {}
+    
+    std::size_t length() const
+    {
+        return word.size();
+    }
+
+    // apply the word to a point known to be in the attractor
+    r2vec_t apply_word(const r2vec_t& point) const
+    {
+        r2vec_t new_pt = point;
+        for (auto let : std::views::reverse(word))
+        {
+            new_pt = let->map(new_pt);
+        }
+        return new_pt;
+    }
+
+
+};
+
 /* This is the main MPA algorithm. See the concepts page for the description
 */
 template<MPA_algorithm_like Algo>
@@ -48,7 +77,8 @@ void MPA_attractor_output_to_frame(
     image_metadata_t meta,
     unsigned int max_iterations,
     Algo&& algorithm,
-    std::vector<std::vector<int>>& out_frame)
+    std::vector<std::vector<int>>& out_frame,
+    std::vector<cylinder_set_t> specific_cylinders)
     //TODO: Output the algorithm result to an `std::mdspan` type for the frame once available
 //std::mdspan<int, std::dextents<int,2>> out_frame)
 {
@@ -71,7 +101,10 @@ void MPA_attractor_output_to_frame(
         //Mark the point inside
         if (meta.dom.is_in_range(point))
         {
-            out_frame[coords.first][coords.second] = 1;
+            if (out_frame[coords.first][coords.second] == 0)
+            {
+                out_frame[coords.first][coords.second] = 1;
+            }
         }
 
         // Early breakout if needed
@@ -109,7 +142,25 @@ void MPA_attractor_output_to_frame(
 
             inside_pixels.emplace(new_point, num_iterations + 1);
         }
-
+        auto first_point = inside_pixels.front();
+        // for each cylinder set u_n, calculate u_n w, where w is known to be in the attractor and end up in the frame
+        // TODO: Replace with std::views::enumerate when available
+        for (auto i = 0u; auto cylinder_set : specific_cylinders)
+        {
+            if (cylinder_set.length() + first_point.num_of_iterations >= max_iterations)
+            {
+                i++;
+                continue;
+            }
+            auto point_in_cylinder = cylinder_set.apply_word(first_point.point);
+            //Mark the point inside the i-th cylinder set
+            if (meta.dom.is_in_range(point_in_cylinder))
+            {
+                auto coords = meta.pixel_id_from_value(point_in_cylinder.x, point_in_cylinder.y);
+                out_frame[coords.first][coords.second] = 2 + i;
+            }
+            i++;
+        }
         inside_pixels.pop();
     }
 

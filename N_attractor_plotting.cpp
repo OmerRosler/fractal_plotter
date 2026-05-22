@@ -42,7 +42,7 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     
     //This is some subset of the attractor to zoom in to
     image_metadata_t meta = { res,
-            frc::picture_domain_t{.x{-bound / 10, bound / 10}, .y{-bound / 10,bound / 10} }
+            frc::picture_domain_t{.x{-bound / 2, bound / 2}, .y{-bound / 2,bound / 2} }
     };
 
     N_attractor_algorithm algo{ param };
@@ -51,11 +51,17 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     std::vector frame(meta.res.height + 1,
         std::vector<int>(meta.res.width + 1));
 
+    // specific cylinder sets to color differently
+    const cylinder_set_t::letter_t f = algo.ifs.begin();
+    const cylinder_set_t::letter_t g = algo.ifs.begin() + 1;
+
     //fill the frame data with the algorithm result
-    MPA_attractor_output_to_frame(meta, max_iterations, algo, frame);
+    MPA_attractor_output_to_frame(meta, max_iterations, algo, frame, {
+        cylinder_set_t::word_t{ f,f,g,f },
+        cylinder_set_t::word_t{ f,g,g,f } });
 
     //plot it
-    bitmap_image fractal_jet(meta.res.width, meta.res.height);    
+    bitmap_image fractal_jet(meta.res.width, meta.res.height);
 
     //set all pixels to white
     fractal_jet.clear(255);
@@ -65,15 +71,25 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     {
         for (int j = 0; j < meta.res.width; ++j)
         {
-            if (frame[i][j] != 0)
+            if (frame[i][j] == 1)
             {
+                // black
                 fractal_jet.set_pixel(i, j, 0, 0, 0);
+            }
+            else if (frame[i][j] == 2)
+            {
+                // color 1
+                fractal_jet.set_pixel(i, j, 255, 0, 0);
+            }
+            else if (frame[i][j] == 3)
+            {
+                // color 2
+                fractal_jet.set_pixel(i, j, 0, 0, 255);
             }
         }
     }
     //save the image
     fractal_jet.save_image(pic_path);
 
-    
 }
 }
