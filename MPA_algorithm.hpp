@@ -145,7 +145,7 @@ void MPA_attractor_output_to_frame(
         auto first_point = inside_pixels.front();
         // for each cylinder set u_n, calculate u_n w, where w is known to be in the attractor and end up in the frame
         // TODO: Replace with std::views::enumerate when available
-        for (auto i = 0u; auto cylinder_set : specific_cylinders)
+        for (auto i = 0u; const auto& cylinder_set : specific_cylinders)
         {
             if (cylinder_set.length() + first_point.num_of_iterations >= max_iterations)
             {

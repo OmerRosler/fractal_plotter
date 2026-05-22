@@ -31,34 +31,44 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     resolution_t res,
     unsigned int max_iterations)
 {
-
-    auto N_ifs_abs_bound = [](double x)
-    {
-        return x / (1.0 - x);
-    };
-    auto x_bound = N_ifs_abs_bound(param.x);
-    auto y_bound = N_ifs_abs_bound(param.y);
-    auto bound = std::max(x_bound,y_bound);
-    
-    //This is some subset of the attractor to zoom in to
-    image_metadata_t meta = { res,
-            frc::picture_domain_t{.x{-bound / 2, bound / 2}, .y{-bound / 2,bound / 2} }
-    };
-
     N_attractor_algorithm algo{ param };
 
+    // specific cylinder sets to color differently
+    const cylinder_set_t::letter_t p = algo.ifs.begin();
+    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
+    // these two cylinder set were found numerically to contain a trap
+    const cylinder_set_t u10 = { { m,p,p,p,p,m,m,m,m,m } };
+    const cylinder_set_t v10 = { { p,m,m,m,p,p,p,p,p,p } };
+
+    // find the region to zoom around
+
+    // relevant points
+    const auto m_infty = m->fixed_point;
+    const auto p_infty = p->fixed_point;
+    const auto u_10_m_infty = u10.apply_word(m_infty);
+    const auto v_10_m_infty = v10.apply_word(m_infty);
+    const auto u_10_p_infty = u10.apply_word(p_infty);
+    const auto v_10_p_infty = v10.apply_word(p_infty);
+
+    double y_dist = (v_10_p_infty.y - u_10_m_infty.y);
+    // as the cylinder set is almost vertical, we just take the Delta y
+    // and add something around it so it is in the center of the image
+    // we can change this parameter as we like
+    int y_sorround = 1.0/res.ratio() - 1;
+    // the x length is determined from the resolution
+    int x_sorround = int(1.0/ ((1 + 1.0 / y_sorround) * res.ratio()));
+    image_metadata_t meta = { res,
+            frc::picture_domain_t{
+            .x{u_10_p_infty.x - y_dist/(2* x_sorround), u_10_p_infty.x+ y_dist/ (2 * x_sorround)},
+            .y{u_10_m_infty.y - y_dist/(2* y_sorround), v_10_p_infty.y  + y_dist / (2 * y_sorround)} }
+    };
+    
     //TODO: Use `std::mdspan` instead of passing the vector
     std::vector frame(meta.res.width + 1,
         std::vector<int>(meta.res.height + 1));
-
-    // specific cylinder sets to color differently
-    const cylinder_set_t::letter_t f = algo.ifs.begin();
-    const cylinder_set_t::letter_t g = algo.ifs.begin() + 1;
-
     //fill the frame data with the algorithm result
     MPA_attractor_output_to_frame(meta, max_iterations, algo, frame, {
-        cylinder_set_t::word_t{ f,f,g,f },
-        cylinder_set_t::word_t{ f,g,g,f } });
+        u10, v10 });
 
     //plot it
     bitmap_image fractal_jet(meta.res.width, meta.res.height);

@@ -33,10 +33,11 @@ int main()
     //    {resolution_t{ 600, 600 },
     //    picture_domain_t{ .x{0.5,1}, .y{0.5,1} }}, 20);
 
-    frc::r2vec_t param = { 1 / 1.35, 1 / 1.55 };
+    // this parameter was calculated numerically so it has a trap with words of length 10
+    frc::r2vec_t param = { 0.5973271183135436, 0.7995842614382124 };
     plot_partial_N_attractor(param,
-        "pics/filter_test_10.bmp",
-        frc::resolution_t{ 800, 800 },
+        "pics/zoom_trap_test.bmp",
+        frc::resolution_t{ 80, 800 },
         20);
 
     return 0;
