@@ -48,8 +48,8 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     N_attractor_algorithm algo{ param };
 
     //TODO: Use `std::mdspan` instead of passing the vector
-    std::vector frame(meta.res.height + 1,
-        std::vector<int>(meta.res.width + 1));
+    std::vector frame(meta.res.width + 1,
+        std::vector<int>(meta.res.height + 1));
 
     // specific cylinder sets to color differently
     const cylinder_set_t::letter_t f = algo.ifs.begin();
@@ -67,9 +67,9 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     fractal_jet.clear(255);
 
     //Fill picture from frame
-    for (int i = 0; i < meta.res.height; ++i)
+    for (int i = 0; i < meta.res.width; ++i)
     {
-        for (int j = 0; j < meta.res.width; ++j)
+        for (int j = 0; j < meta.res.height; ++j)
         {
             if (frame[i][j] == 1)
             {

@@ -234,7 +234,12 @@ struct interval_t
     {
         return (d >= start) && (d <= end);
     }
+
 };
+
+// find optimal aspect ratio using continued fractions
+std::pair<std::int64_t, std::int64_t>
+    bounded_rational(double r, std::int64_t max_den);
 
 
 // The domain is a rectangle as BMP files are rectangles
@@ -243,11 +248,15 @@ struct picture_domain_t
     interval_t x;
     interval_t y;
 
+    inline double ratio() const { return x.length() / y.length(); }
+
     inline double area() const { return x.length() * y.length(); }
 
     inline bool is_resolution_for_domain(resolution_t res) const
     {
-        return almost_equal(res.ratio(), x.length() / y.length());
+        // the aspect ratio x:y must match to m:n up to 1/n
+        // TODO: Continued fractions must give 1/n^2 error
+        return std::abs(res.ratio() - this->ratio()) < (1.0/(res.height));
     }
     inline bool is_in_range(const r2vec_t& vec) const
     {
@@ -261,6 +270,17 @@ struct picture_domain_t
     {
         return std::max(x.length() / res.width,
             y.length() / res.height) / std::sqrt(2);
+    }
+
+    inline resolution_t min_resolution_for_domain(unsigned int max_height)
+    {
+        auto [width, height] = bounded_rational(ratio(), max_height);
+        assert(width > 0);
+        assert(height > 0);
+        assert(width < max_height);
+        assert(height < max_height);
+        return resolution_t{ static_cast<unsigned int>(width), 
+            static_cast<unsigned int>(height) };
     }
 };
 
