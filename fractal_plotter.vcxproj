@@ -129,6 +129,7 @@
     <ClCompile>
       <LanguageStandard>stdcpplatest</LanguageStandard>
       <EnableModules>false</EnableModules>
+      <PreprocessorDefinitions>_MSVC_STL_HARDENING_MODE=1</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -12,15 +12,15 @@ namespace frc
 */
 struct ifs_map_data_t
 {
-	function_holder_t<r2vec_t(r2vec_t)> map;
+	function_holder_t<r2vec_t(r2vec_t) const> map;
 	r2vec_t fixed_point;
 
-    ifs_map_data_t(function_holder_t<r2vec_t(r2vec_t)>&& fn, const r2vec_t& fp):
+    ifs_map_data_t(function_holder_t<r2vec_t(r2vec_t) const>&& fn, const r2vec_t& fp):
         map(std::move(fn)), fixed_point(fp)
     {
         auto res = map(fixed_point);
         assert(almost_equal(res.x, fixed_point.x) &&
-            almost_equal(res.y, fixed_point.y),
+            almost_equal(res.y, fixed_point.y) &&
             "Input point is not fixed under the map");
     }
 };
@@ -94,7 +94,7 @@ void MPA_attractor_output_to_frame(
                 for (auto&& [ifs_map, _] : algorithm.ifs)
                 {
                     auto new_pt = ifs_map(point);
-                    assert(!meta.dom.is_in_range(new_pt), "Bad condition");
+                    assert(!meta.dom.is_in_range(new_pt) && "Bad condition");
                 }
 #endif
                 inside_pixels.pop();

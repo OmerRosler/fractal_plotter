@@ -264,6 +264,12 @@ struct picture_domain_t
     }
 };
 
+int ifloor(std::floating_point auto d)
+{
+    // TODO: Assert width is enough
+    return static_cast<int>(std::floor(d));
+}
+
 //This is the metadata used to represent an image
 struct image_metadata_t
 {
@@ -276,8 +282,8 @@ struct image_metadata_t
         //TODO: Why was I adding 0.5 and 1?
         /*return { std::floor(res.width * (x - dom.x.start) / dom.x.length() - 0.5)+1,
         std::floor(res.height * (y - dom.y.end) / (-dom.y.length()) + 0.5)+1 };*/
-        return { std::floor(res.width * (x - dom.x.start) / dom.x.length()),
-        std::floor(res.height * (y - dom.y.end) / (-dom.y.length()))};
+        return { ifloor(res.width * (x - dom.x.start) / dom.x.length()),
+        ifloor(res.height * (y - dom.y.end) / (-dom.y.length()))};
     }
 
     //Used to convert pixel id to the point in R2 it represents in the image
