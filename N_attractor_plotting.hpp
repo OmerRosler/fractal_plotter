@@ -76,4 +76,5 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     resolution_t res,
     unsigned int max_iterations);
 
+void plot_4_trap_points(r2vec_t param, bitmap_image& img);
 }

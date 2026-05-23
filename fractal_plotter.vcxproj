@@ -27,6 +27,7 @@
     <ClCompile Include="mandlebrot_drawer.hpp" />
     <ClCompile Include="generator.hpp" />
     <ClCompile Include="N_drawer.cpp" />
+    <ClCompile Include="thicken_image.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -44,6 +45,7 @@
     <ClInclude Include="packed_5_bit_queue.hpp" />
     <ClInclude Include="recursive_tree_dfs_iterator.hpp" />
     <ClInclude Include="run_algorithm_per_pixel.hpp" />
+    <ClInclude Include="thicken_image.hpp" />
     <ClInclude Include="utils.hpp" />
     <ClInclude Include="zoom_in_tool.hpp" />
   </ItemGroup>

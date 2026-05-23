@@ -102,4 +102,57 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     fractal_jet.save_image(pic_path);
 
 }
+
+void plot_4_trap_points(r2vec_t param, bitmap_image& img)
+{
+    resolution_t res{ img.width(), img.height()};
+    N_attractor_algorithm algo{ param };
+
+    // specific cylinder sets to color differently
+    const cylinder_set_t::letter_t p = algo.ifs.begin();
+    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
+    // these two cylinder set were found numerically to contain a trap
+    const cylinder_set_t u10 = { { m,p,p,p,p,m,m,m,m,m } };
+    const cylinder_set_t v10 = { { p,m,m,m,p,p,p,p,p,p } };
+
+    // find the region to zoom around
+
+    // relevant points
+    const auto m_infty = m->fixed_point;
+    const auto p_infty = p->fixed_point;
+    const auto pm_infty = p->map(m_infty);
+
+    // the trap points
+    const auto u_10_m_infty = u10.apply_word(m_infty);
+    const auto v_10_m_infty = v10.apply_word(m_infty);
+    const auto u_10_p_infty = u10.apply_word(p_infty);
+    const auto v_10_pm_infty = v10.apply_word(pm_infty);
+
+    const auto v_10_p_infty = v10.apply_word(p_infty);
+    double y_dist = (v_10_p_infty.y - u_10_m_infty.y);
+    // as the cylinder set is almost vertical, we just take the Delta y
+    // and add something around it so it is in the center of the image
+    // we can change this parameter as we like
+    int y_sorround = 1.0 / res.ratio() - 1;
+    // the x length is determined from the resolution
+    int x_sorround = int(1.0 / ((1 + 1.0 / y_sorround) * res.ratio()));
+    image_metadata_t meta = { res,
+            frc::picture_domain_t{
+            .x{u_10_p_infty.x - y_dist / (2 * x_sorround), u_10_p_infty.x + y_dist / (2 * x_sorround)},
+            .y{u_10_m_infty.y - y_dist / (2 * y_sorround), v_10_p_infty.y + y_dist / (2 * y_sorround)} }
+    };
+
+    auto u10m_infty_coords = meta.pixel_id_from_value(u_10_m_infty.x, u_10_m_infty.y);
+    img.set_pixel(u10m_infty_coords.first, u10m_infty_coords.second, 0, 255, 0);
+
+    auto u10p_infty_coords = meta.pixel_id_from_value(u_10_p_infty.x, u_10_p_infty.y);
+    img.set_pixel(u10p_infty_coords.first, u10p_infty_coords.second, 0, 255, 0);
+
+    auto v10m_infty_coords = meta.pixel_id_from_value(v_10_m_infty.x, v_10_m_infty.y);
+    img.set_pixel(v10m_infty_coords.first, v10m_infty_coords.second, 255, 255, 0);
+
+    auto v10pm_infty_coords = meta.pixel_id_from_value(v_10_pm_infty.x, v_10_pm_infty.y);
+    img.set_pixel(v10pm_infty_coords.first, v10pm_infty_coords.second, 255, 255, 0);
+
+}
 }

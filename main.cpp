@@ -3,6 +3,7 @@
 #include "N_drawer.hpp"
 #include "zoom_in_tool.hpp"
 #include "N_attractor_plotting.hpp"
+#include "thicken_image.hpp"
 using namespace frc;
 int main()
 {
@@ -35,10 +36,14 @@ int main()
 
     // this parameter was calculated numerically so it has a trap with words of length 10
     frc::r2vec_t param = { 0.5973271183135436, 0.7995842614382124 };
-    plot_partial_N_attractor(param,
+    bitmap_image img("pics/zoom_trap_with_pts.bmp");
+    //plot_4_trap_points(param, img);
+    bitmap_image thickened = thicken(img, 3);
+    thickened.save_image("pics/trap_full_image_test.bmp");
+    /*plot_partial_N_attractor(param,
         "pics/zoom_trap_test.bmp",
         frc::resolution_t{ 80, 800 },
-        30);
+        30);*/
 
     return 0;
 }
