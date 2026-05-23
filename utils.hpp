@@ -14,6 +14,7 @@
 #include "bitmap_image.hpp"
 
 #include "algorithm_concepts.hpp"
+#include "packed_5_bit_queue.hpp"
 
 namespace frc
 {

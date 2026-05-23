@@ -41,6 +41,7 @@
     <ClInclude Include="N_algorithm.hpp" />
     <ClInclude Include="N_attractor_plotting.hpp" />
     <ClInclude Include="N_drawer.hpp" />
+    <ClInclude Include="packed_5_bit_queue.hpp" />
     <ClInclude Include="recursive_tree_dfs_iterator.hpp" />
     <ClInclude Include="run_algorithm_per_pixel.hpp" />
     <ClInclude Include="utils.hpp" />

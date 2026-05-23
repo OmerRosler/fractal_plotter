@@ -38,7 +38,7 @@ int main()
     plot_partial_N_attractor(param,
         "pics/zoom_trap_test.bmp",
         frc::resolution_t{ 80, 800 },
-        20);
+        30);
 
     return 0;
 }

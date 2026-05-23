@@ -89,5 +89,8 @@
     <ClInclude Include="N_attractor_plotting.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="packed_5_bit_queue.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

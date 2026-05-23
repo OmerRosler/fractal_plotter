@@ -27,12 +27,15 @@ struct ifs_map_data_t
 
 /* The information on the points used by the algorithm
 * This may change in the future if we want infinite zoom-in
+*  This is replaced with SOA approach to split the counters from the points
+* this saves padding in the queue (which is enormous)
 */
-struct iterated_point
-{
-    r2vec_t point;
-    unsigned int num_of_iterations = 0u;
-};
+//struct iterated_point
+//{
+//    r2vec_t point;
+//    std::uint8_t num_of_iterations = 0u;
+//};
+
 
 /* The basic amount of information needed for the MPA algorithm
 */
@@ -75,7 +78,7 @@ struct cylinder_set_t
 template<MPA_algorithm_like Algo>
 void MPA_attractor_output_to_frame(
     image_metadata_t meta,
-    unsigned int max_iterations,
+    std::uint8_t max_iterations,
     Algo&& algorithm,
     std::vector<std::vector<int>>& out_frame,
     std::vector<cylinder_set_t> specific_cylinders)
@@ -83,20 +86,26 @@ void MPA_attractor_output_to_frame(
 //std::mdspan<int, std::dextents<int,2>> out_frame)
 {
     assert(meta.dom.is_resolution_for_domain(meta.res));
-
-    std::queue<iterated_point> inside_pixels;
+    //TODO: Dispatch which container to use for the counter based on max size
+    assert(max_iterations < 32);
+    std::queue<r2vec_t> inside_pixels_pts;
+    // the num iterations variable uses 5bits, so we make a queue of pages 
+    // built of 5bit in total (but still with aligned memory access)
+    packed_5bit_queue inside_pixels_num_iterations;
     //Fill the queue with the fixed points of the maps (which are definetly in the attractor)
     for (auto&& [_, fp] : algorithm.ifs)
     {
-        inside_pixels.push({ fp });
+        inside_pixels_pts.push(fp);
+        inside_pixels_num_iterations.push(0u);
     }
-    while (!inside_pixels.empty())
+    while (!inside_pixels_pts.empty())
     {
         //Extract point known to be inside the attractor
-        auto [point, num_iterations] = inside_pixels.front();
+        const auto point = inside_pixels_pts.front();
+        inside_pixels_pts.pop();
+        const auto num_iterations = inside_pixels_num_iterations.pop();
 
         auto coords = meta.pixel_id_from_value(point.x, point.y);
-
 
         //Mark the point inside
         if (meta.dom.is_in_range(point))
@@ -110,7 +119,6 @@ void MPA_attractor_output_to_frame(
         // Early breakout if needed
         if (num_iterations == max_iterations)
         {
-            inside_pixels.pop();
             continue;
         }
 
@@ -123,14 +131,6 @@ void MPA_attractor_output_to_frame(
                 point, 
                 max_iterations - num_iterations))
             {
-#ifndef NDEBUG
-                for (auto&& [ifs_map, _] : algorithm.ifs)
-                {
-                    auto new_pt = ifs_map(point);
-                    assert(!meta.dom.is_in_range(new_pt) && "Bad condition");
-                }
-#endif
-                inside_pixels.pop();
                 continue;
             }
         }
@@ -138,21 +138,21 @@ void MPA_attractor_output_to_frame(
         //Apply all maps to the point and add them to the queue
         for (auto&& [ifs_map, _] : algorithm.ifs)
         {
-            auto new_point = ifs_map(point);
+            const auto new_point = ifs_map(point);
 
-            inside_pixels.emplace(new_point, num_iterations + 1);
+            inside_pixels_pts.emplace(new_point);
+            inside_pixels_num_iterations.push(num_iterations + 1);
         }
-        auto first_point = inside_pixels.front();
         // for each cylinder set u_n, calculate u_n w, where w is known to be in the attractor and end up in the frame
         // TODO: Replace with std::views::enumerate when available
         for (auto i = 0u; const auto& cylinder_set : specific_cylinders)
         {
-            if (cylinder_set.length() + first_point.num_of_iterations >= max_iterations)
+            if (cylinder_set.length() + num_iterations >= max_iterations)
             {
                 i++;
                 continue;
             }
-            auto point_in_cylinder = cylinder_set.apply_word(first_point.point);
+            auto point_in_cylinder = cylinder_set.apply_word(point);
             //Mark the point inside the i-th cylinder set
             if (meta.dom.is_in_range(point_in_cylinder))
             {
@@ -161,7 +161,6 @@ void MPA_attractor_output_to_frame(
             }
             i++;
         }
-        inside_pixels.pop();
     }
 
 }
