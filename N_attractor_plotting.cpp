@@ -82,7 +82,7 @@ auto N_attractor_algorithm::N_ifs_metadata(frc::r2vec_t param) -> std::vector<fr
     return ifs;
 }
 
-void plot_partial_N_attractor(frc::r2vec_t param, 
+image_metadata_t plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
     unsigned int max_iterations)
@@ -149,7 +149,7 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     }
     //save the image
     fractal_jet.save_image(pic_path);
-
+    return meta;
 }
 
 image_metadata_t plot_full_N_attractor(frc::r2vec_t param,

@@ -77,7 +77,7 @@ image_metadata_t plot_full_N_attractor(frc::r2vec_t param,
     unsigned int max_iterations,
     std::vector<cylinder_set_t> cylinders = {}, unsigned int ratio = 1);
 
-void plot_partial_N_attractor(frc::r2vec_t param,
+image_metadata_t plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
     unsigned int max_iterations);
