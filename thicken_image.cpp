@@ -7,6 +7,9 @@ ColorClass classify(const rgb_t& c)
     if (c.red == 0 && c.green == 0 && c.blue == 0)
         return ColorClass::Black;
 
+    if (c.red == 255 && c.green == 0 && c.blue == 255)
+        return ColorClass::Purple;
+
     if (c.red == 255 && c.green == 0 && c.blue == 0)
         return ColorClass::Red;
 
@@ -28,6 +31,9 @@ rgb_t representative(ColorClass c)
     {
     case ColorClass::Black:
         return make_colour(0, 0, 0);
+
+    case ColorClass::Purple:
+        return make_colour(255, 0, 255);
 
     case ColorClass::Red:
         return make_colour(255, 0, 0);

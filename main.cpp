@@ -4,6 +4,7 @@
 #include "zoom_in_tool.hpp"
 #include "N_attractor_plotting.hpp"
 #include "thicken_image.hpp"
+#include "utils.hpp"
 using namespace frc;
 int main()
 {
@@ -35,15 +36,16 @@ int main()
     //    picture_domain_t{ .x{0.5,1}, .y{0.5,1} }}, 20);
 
     // this parameter was calculated numerically so it has a trap with words of length 10
-    frc::r2vec_t param = { 0.5973271183135436, 0.7995842614382124 };
-    bitmap_image img("pics/zoom_trap_with_pts.bmp");
-    //plot_4_trap_points(param, img);
+    frc::r2vec_t param = { 0.6007429091455938, 0.7685732096627909 };
+    std::string image_path = "pics/new_attr_zoom_trap_23.bmp";
+    plot_partial_N_attractor(param,
+        image_path,
+    frc::resolution_t{ 40, 800 },
+    23);
+    bitmap_image img(image_path);
+    plot_4_trap_points(param, img);
     bitmap_image thickened = thicken(img, 3);
-    thickened.save_image("pics/trap_full_image_test.bmp");
-    /*plot_partial_N_attractor(param,
-        "pics/zoom_trap_test.bmp",
-        frc::resolution_t{ 80, 800 },
-        30);*/
+    thickened.save_image("pics/new_attr_thickened.bmp");
 
     return 0;
 }

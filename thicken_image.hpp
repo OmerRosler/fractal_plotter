@@ -5,12 +5,13 @@
 #include <cstdint>
 
 enum class ColorClass : uint8_t {
-    White = 0,
-    Black = 1,
-    Red = 2,
-    Blue = 3,
-    Green = 4,
-    Yellow = 5
+    White,
+    Black,
+    Red,
+    Blue,
+    Purple,
+    Green,
+    Yellow
 };
 
 ColorClass classify(const rgb_t& c);

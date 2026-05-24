@@ -6,6 +6,37 @@
 namespace frc
 {
 
+static std::tuple<cylinder_set_t::letter_t, 
+    cylinder_set_t::letter_t, 
+    cylinder_set_t, 
+    cylinder_set_t> make_cylinders(N_attractor_algorithm& algo)
+{
+    // specific cylinder sets to color differently
+    const cylinder_set_t::letter_t p = algo.ifs.begin();
+    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
+    // these two cylinder set were found numerically to contain a trap
+    const cylinder_set_t u10 = { { m,p,p,p,p,m,m,m,m,m } };
+    const cylinder_set_t v10 = { { p,m,m,m,p,p,p,p,p,p } };
+    return { p, m, u10,v10 };
+}
+
+static std::pair<r2vec_t, r2vec_t> make_edge_points(N_attractor_algorithm& algo,
+    const cylinder_set_t& u)
+{
+    // specific cylinder sets to color differently
+    const cylinder_set_t::letter_t p = algo.ifs.begin();
+    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
+
+    // edge points
+    const auto m_infty = m->fixed_point;
+    const auto p_infty = p->fixed_point;
+
+    const auto u_m_infty = u.apply_word(m_infty);
+    const auto u_p_infty = u.apply_word(p_infty);
+
+    return { u_m_infty , u_p_infty };
+}
+
 auto N_attractor_algorithm::N_ifs_metadata(frc::r2vec_t param) -> std::vector<frc::ifs_map_data_t>
 {
     auto fplus = [param](frc::r2vec_t pt)
@@ -33,35 +64,23 @@ void plot_partial_N_attractor(frc::r2vec_t param,
 {
     N_attractor_algorithm algo{ param };
 
-    // specific cylinder sets to color differently
-    const cylinder_set_t::letter_t p = algo.ifs.begin();
-    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
-    // these two cylinder set were found numerically to contain a trap
-    const cylinder_set_t u10 = { { m,p,p,p,p,m,m,m,m,m } };
-    const cylinder_set_t v10 = { { p,m,m,m,p,p,p,p,p,p } };
-
-    // find the region to zoom around
-
-    // relevant points
-    const auto m_infty = m->fixed_point;
-    const auto p_infty = p->fixed_point;
-    const auto u_10_m_infty = u10.apply_word(m_infty);
-    const auto v_10_m_infty = v10.apply_word(m_infty);
-    const auto u_10_p_infty = u10.apply_word(p_infty);
-    const auto v_10_p_infty = v10.apply_word(p_infty);
+    // relevant points and cylinders
+    const auto [p, m, u10, v10] = make_cylinders(algo);
+    const auto [u_10_m_infty, u_10_p_infty] = make_edge_points(algo, u10);
+    const auto [v_10_m_infty, v_10_p_infty] = make_edge_points(algo, v10);
 
     double y_dist = (v_10_p_infty.y - u_10_m_infty.y);
     // as the cylinder set is almost vertical, we just take the Delta y
     // and add something around it so it is in the center of the image
     // we can change this parameter as we like
-    int y_sorround = 1.0/res.ratio() - 1;
+    int y_sorround = 3.0/res.ratio() - 3;
     // the x length is determined from the resolution
-    int x_sorround = int(1.0/ ((1 + 1.0 / y_sorround) * res.ratio()));
-    image_metadata_t meta = { res,
-            frc::picture_domain_t{
-            .x{u_10_p_infty.x - y_dist/(2* x_sorround), u_10_p_infty.x+ y_dist/ (2 * x_sorround)},
-            .y{u_10_m_infty.y - y_dist/(2* y_sorround), v_10_p_infty.y  + y_dist / (2 * y_sorround)} }
-    };
+    int x_sorround = int(1.0/ ((1.0 + 1.0 / y_sorround) * res.ratio()));
+    picture_domain_t target_dom{
+            .x{u_10_p_infty.x - y_dist / (2 * x_sorround), u_10_p_infty.x + y_dist / (2 * x_sorround)},
+            .y{u_10_m_infty.y - y_dist / (2 * y_sorround), v_10_p_infty.y + y_dist / (2 * y_sorround)} };
+    res = target_dom.min_resolution_for_domain(res);
+    image_metadata_t meta = { res,  target_dom };
     
     //TODO: Use `std::mdspan` instead of passing the vector
     std::vector frame(meta.res.width + 1,
@@ -96,6 +115,11 @@ void plot_partial_N_attractor(frc::r2vec_t param,
                 // color 2
                 fractal_jet.set_pixel(i, j, 0, 0, 255);
             }
+            else if (frame[i][j] > 5)
+            {
+                // color 2
+                fractal_jet.set_pixel(i, j, 255, 0, 255);
+            }
         }
     }
     //save the image
@@ -108,39 +132,28 @@ void plot_4_trap_points(r2vec_t param, bitmap_image& img)
     resolution_t res{ img.width(), img.height()};
     N_attractor_algorithm algo{ param };
 
-    // specific cylinder sets to color differently
-    const cylinder_set_t::letter_t p = algo.ifs.begin();
-    const cylinder_set_t::letter_t m = algo.ifs.begin() + 1;
-    // these two cylinder set were found numerically to contain a trap
-    const cylinder_set_t u10 = { { m,p,p,p,p,m,m,m,m,m } };
-    const cylinder_set_t v10 = { { p,m,m,m,p,p,p,p,p,p } };
-
-    // find the region to zoom around
+    const auto [p, m, u10, v10] = make_cylinders(algo);
 
     // relevant points
-    const auto m_infty = m->fixed_point;
-    const auto p_infty = p->fixed_point;
-    const auto pm_infty = p->map(m_infty);
-
-    // the trap points
-    const auto u_10_m_infty = u10.apply_word(m_infty);
-    const auto v_10_m_infty = v10.apply_word(m_infty);
-    const auto u_10_p_infty = u10.apply_word(p_infty);
+    const auto [u_10_m_infty, u_10_p_infty] = make_edge_points(algo, u10);
+    const auto [v_10_m_infty, v_10_p_infty] = make_edge_points(algo, v10);
+    const auto pm_infty = p->map(m->fixed_point);
     const auto v_10_pm_infty = v10.apply_word(pm_infty);
 
-    const auto v_10_p_infty = v10.apply_word(p_infty);
+    // image location
+
     double y_dist = (v_10_p_infty.y - u_10_m_infty.y);
     // as the cylinder set is almost vertical, we just take the Delta y
     // and add something around it so it is in the center of the image
     // we can change this parameter as we like
-    int y_sorround = 1.0 / res.ratio() - 1;
+    int y_sorround = 3.0 / res.ratio() - 3;
     // the x length is determined from the resolution
     int x_sorround = int(1.0 / ((1 + 1.0 / y_sorround) * res.ratio()));
-    image_metadata_t meta = { res,
-            frc::picture_domain_t{
+    picture_domain_t target_dom{
             .x{u_10_p_infty.x - y_dist / (2 * x_sorround), u_10_p_infty.x + y_dist / (2 * x_sorround)},
-            .y{u_10_m_infty.y - y_dist / (2 * y_sorround), v_10_p_infty.y + y_dist / (2 * y_sorround)} }
-    };
+            .y{u_10_m_infty.y - y_dist / (2 * y_sorround), v_10_p_infty.y + y_dist / (2 * y_sorround)} };
+    res = target_dom.min_resolution_for_domain(res);
+    image_metadata_t meta = { res,  target_dom };
 
     auto u10m_infty_coords = meta.pixel_id_from_value(u_10_m_infty.x, u_10_m_infty.y);
     img.set_pixel(u10m_infty_coords.first, u10m_infty_coords.second, 0, 255, 0);

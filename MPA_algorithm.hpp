@@ -157,7 +157,7 @@ void MPA_attractor_output_to_frame(
             if (meta.dom.is_in_range(point_in_cylinder))
             {
                 auto coords = meta.pixel_id_from_value(point_in_cylinder.x, point_in_cylinder.y);
-                out_frame[coords.first][coords.second] = 2 + i;
+                out_frame[coords.first][coords.second] += (2 + i);
             }
             i++;
         }
