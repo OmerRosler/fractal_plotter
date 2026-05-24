@@ -6,10 +6,10 @@
 namespace frc
 {
 
-static std::tuple<cylinder_set_t::letter_t, 
+std::tuple<cylinder_set_t::letter_t, 
     cylinder_set_t::letter_t, 
     cylinder_set_t, 
-    cylinder_set_t> make_cylinders(N_attractor_algorithm& algo)
+    cylinder_set_t> make_cylinders_with_known_trap(N_attractor_algorithm& algo)
 {
     // specific cylinder sets to color differently
     const cylinder_set_t::letter_t p = algo.ifs.begin();
@@ -35,6 +35,31 @@ static std::pair<r2vec_t, r2vec_t> make_edge_points(N_attractor_algorithm& algo,
     const auto u_p_infty = u.apply_word(p_infty);
 
     return { u_m_infty , u_p_infty };
+}
+frc::picture_domain_t N_plus_attr_domain(frc::r2vec_t param)
+{
+    auto make_bd = [](auto x)
+    {
+        return x / (1.0 - x);
+    };
+    auto x_bd = make_bd(param.x);
+    auto y_bd = make_bd(param.y);
+    return { .x = {-x_bd,x_bd}, .y = {-y_bd, y_bd} };
+}
+
+frc::picture_domain_t N_minus_attr_domain(frc::r2vec_t param)
+{
+    auto make_x_bd = [](auto x)
+    {
+        return -x / (1.0 + x);
+    };
+    auto make_y_bd = [](auto x)
+    {
+        return x / (1.0 - x);
+    };
+    auto x_bd = make_x_bd(param.x);
+    auto y_bd = make_y_bd(param.y);
+    return { .x = {-x_bd,x_bd}, .y = {-y_bd, y_bd} };
 }
 
 auto N_attractor_algorithm::N_ifs_metadata(frc::r2vec_t param) -> std::vector<frc::ifs_map_data_t>
@@ -65,7 +90,7 @@ void plot_partial_N_attractor(frc::r2vec_t param,
     N_attractor_algorithm algo{ param };
 
     // relevant points and cylinders
-    const auto [p, m, u10, v10] = make_cylinders(algo);
+    const auto [p, m, u10, v10] = make_cylinders_with_known_trap(algo);
     const auto [u_10_m_infty, u_10_p_infty] = make_edge_points(algo, u10);
     const auto [v_10_m_infty, v_10_p_infty] = make_edge_points(algo, v10);
 
@@ -127,12 +152,103 @@ void plot_partial_N_attractor(frc::r2vec_t param,
 
 }
 
+image_metadata_t plot_full_N_attractor(frc::r2vec_t param,
+    const std::string& pic_path,
+    resolution_t target_res,
+    unsigned int max_iterations,
+    std::vector<cylinder_set_t> cylinders, unsigned int ratio)
+{
+    //TODO: Plot the opposite cases
+    assert(param.y > 0);
+    assert(std::abs(param.x) < param.y);
+    picture_domain_t dom = (param.x > 0) ?
+        N_plus_attr_domain(param) : N_minus_attr_domain(param);
+    dom.x.start /= ratio;
+    dom.x.end /= ratio;
+    dom.y.start /= ratio;
+    dom.y.end /= ratio;
+    resolution_t res = dom.min_resolution_for_domain(target_res);
+    image_metadata_t meta = { res, dom };
+
+    N_attractor_algorithm algo{ param };
+
+    //TODO: Use `std::mdspan` instead of passing the vector
+    std::vector frame(res.width + 1,
+        std::vector<int>(res.height + 1));
+    //fill the frame data with the algorithm result
+    MPA_attractor_output_to_frame(meta, max_iterations, algo, frame, cylinders);
+
+    //plot it
+    bitmap_image fractal_jet(res.width, res.height);
+
+    //set all pixels to white
+    fractal_jet.clear(255);
+
+    //Fill picture from frame
+    for (int i = 0; i < res.width; ++i)
+    {
+        for (int j = 0; j < res.height; ++j)
+        {
+            if (frame[i][j] == 1)
+            {
+                // black
+                fractal_jet.set_pixel(i, j, 0, 0, 0);
+            }
+            else if (frame[i][j] == 2)
+            {
+                // color 1
+                fractal_jet.set_pixel(i, j, 255, 0, 0);
+            }
+            else if (frame[i][j] == 3)
+            {
+                // color 2
+                fractal_jet.set_pixel(i, j, 0, 0, 255);
+            }
+            else if (frame[i][j] > 5)
+            {
+                // color 2
+                fractal_jet.set_pixel(i, j, 255, 0, 255);
+            }
+        }
+    }
+    //save the image
+    fractal_jet.save_image(pic_path);
+
+    return meta;
+}
+
+void plot_4_trap_points(image_metadata_t meta, bitmap_image& img, r2vec_t param)
+{
+    N_attractor_algorithm algo{ param };
+
+    const auto [p, m, u10, v10] = make_cylinders_with_known_trap(algo);
+
+    // relevant points
+    const auto [u_10_m_infty, u_10_p_infty] = make_edge_points(algo, u10);
+    const auto [v_10_m_infty, v_10_p_infty] = make_edge_points(algo, v10);
+    const auto pm_infty = p->map(m->fixed_point);
+    const auto v_10_pm_infty = v10.apply_word(pm_infty);
+
+
+    auto u10m_infty_coords = meta.pixel_id_from_value(u_10_m_infty.x, u_10_m_infty.y);
+    img.set_pixel(u10m_infty_coords.first, u10m_infty_coords.second, 0, 255, 0);
+
+    auto u10p_infty_coords = meta.pixel_id_from_value(u_10_p_infty.x, u_10_p_infty.y);
+    img.set_pixel(u10p_infty_coords.first, u10p_infty_coords.second, 0, 255, 0);
+
+    auto v10m_infty_coords = meta.pixel_id_from_value(v_10_m_infty.x, v_10_m_infty.y);
+    img.set_pixel(v10m_infty_coords.first, v10m_infty_coords.second, 255, 255, 0);
+
+    auto v10pm_infty_coords = meta.pixel_id_from_value(v_10_pm_infty.x, v_10_pm_infty.y);
+    img.set_pixel(v10pm_infty_coords.first, v10pm_infty_coords.second, 255, 255, 0);
+}
+
 void plot_4_trap_points(r2vec_t param, bitmap_image& img)
 {
     resolution_t res{ img.width(), img.height()};
     N_attractor_algorithm algo{ param };
 
-    const auto [p, m, u10, v10] = make_cylinders(algo);
+    const auto [p, m, u10, v10] = make_cylinders_with_known_trap(algo);
 
     // relevant points
     const auto [u_10_m_infty, u_10_p_infty] = make_edge_points(algo, u10);

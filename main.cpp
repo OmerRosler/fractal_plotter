@@ -37,15 +37,17 @@ int main()
 
     // this parameter was calculated numerically so it has a trap with words of length 10
     frc::r2vec_t param = { 0.6007429091455938, 0.7685732096627909 };
-    std::string image_path = "pics/new_attr_zoom_trap_23.bmp";
-    plot_partial_N_attractor(param,
+    N_attractor_algorithm algo(param);
+    auto [_1, _2, u10, v10] = make_cylinders_with_known_trap(algo);
+    std::string image_path = "pics/new_attr_full_23.bmp";
+    auto meta = plot_full_N_attractor(param,
         image_path,
-    frc::resolution_t{ 40, 800 },
-    23);
+    frc::resolution_t{ 800, 800 },
+    23, {u10,v10});
     bitmap_image img(image_path);
-    plot_4_trap_points(param, img);
-    bitmap_image thickened = thicken(img, 3);
-    thickened.save_image("pics/new_attr_thickened.bmp");
+    plot_4_trap_points(meta, img, param);
+    //bitmap_image thickened = thicken(img, 3);
+    img.save_image(image_path);
 
     return 0;
 }

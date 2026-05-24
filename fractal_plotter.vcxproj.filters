@@ -42,9 +42,6 @@
     <ClCompile Include="N_attractor_plotting.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="thicken_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

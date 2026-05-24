@@ -28,7 +28,6 @@
     <ClCompile Include="generator.hpp" />
     <ClCompile Include="N_drawer.cpp" />
     <ClCompile Include="thicken_image.cpp" />
-    <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="algorithm_concepts.hpp" />

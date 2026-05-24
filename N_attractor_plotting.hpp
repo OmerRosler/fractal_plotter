@@ -71,10 +71,22 @@ private:
     static std::vector<ifs_map_data_t> N_ifs_metadata(r2vec_t param);
 };
 
+image_metadata_t plot_full_N_attractor(frc::r2vec_t param,
+    const std::string& pic_path,
+    resolution_t target_res,
+    unsigned int max_iterations,
+    std::vector<cylinder_set_t> cylinders = {}, unsigned int ratio = 1);
+
 void plot_partial_N_attractor(frc::r2vec_t param,
     const std::string& pic_path,
     resolution_t res,
     unsigned int max_iterations);
 
 void plot_4_trap_points(r2vec_t param, bitmap_image& img);
+void plot_4_trap_points(image_metadata_t meta, bitmap_image& img, r2vec_t param);
+
+std::tuple<cylinder_set_t::letter_t,
+    cylinder_set_t::letter_t,
+    cylinder_set_t,
+    cylinder_set_t> make_cylinders_with_known_trap(N_attractor_algorithm& algo);
 }

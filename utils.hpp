@@ -245,11 +245,6 @@ struct interval_t
 
 };
 
-// find optimal aspect ratio using continued fractions
-std::pair<std::int64_t, std::int64_t>
-    bounded_rational(double r, std::int64_t max_den);
-
-
 // The domain is a rectangle as BMP files are rectangles
 struct picture_domain_t
 {
