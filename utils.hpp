@@ -18,6 +18,13 @@
 
 namespace frc
 {
+
+int ifloor(std::floating_point auto d)
+{
+    // TODO: Assert width is enough
+    return static_cast<int>(std::floor(d));
+}
+
 /* General tool to compare floating point types
 */
 template<std::floating_point T>
@@ -257,7 +264,7 @@ struct picture_domain_t
     {
         // the aspect ratio x:y must match to m:n up to 1/n
         // TODO: Continued fractions must give 1/n^2 error
-        return std::abs(res.ratio() - this->ratio()) < (1.0/(res.height));
+        return std::abs(res.ratio() - this->ratio()) <= (1.0/(res.height));
     }
     inline bool is_in_range(const r2vec_t& vec) const
     {
@@ -273,23 +280,24 @@ struct picture_domain_t
             y.length() / res.height) / std::sqrt(2);
     }
 
-    inline resolution_t min_resolution_for_domain(unsigned int max_height)
+    inline resolution_t min_resolution_for_domain(resolution_t target_res)
     {
-        auto [width, height] = bounded_rational(ratio(), max_height);
-        assert(width > 0);
-        assert(height > 0);
-        assert(width < max_height);
-        assert(height < max_height);
-        return resolution_t{ static_cast<unsigned int>(width), 
-            static_cast<unsigned int>(height) };
+        auto [max_w, max_h] = target_res;
+        auto x_len = x.length();
+        auto y_len = y.length();
+        double scale = std::min(max_w / x_len,
+            max_h / y_len);
+
+        int w = ifloor(x_len * scale);
+        int h = ifloor(y_len * scale);
+        assert(w > 0);
+        assert(h > 0);
+        assert(w <= max_w);
+        assert(h <= max_h);
+        return resolution_t{ static_cast<unsigned int>(w),
+            static_cast<unsigned int>(h) };
     }
 };
-
-int ifloor(std::floating_point auto d)
-{
-    // TODO: Assert width is enough
-    return static_cast<int>(std::floor(d));
-}
 
 //This is the metadata used to represent an image
 struct image_metadata_t
